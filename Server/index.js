@@ -6,9 +6,10 @@ const room = require('./Models/Room');
 const mongoose = require('mongoose');
 console.log("Server has started!");
 
-//var players = [];
-var sockets = [];
+// Array with all lobby rooms
 var rooms = [];
+// Array with all started rooms
+var active_rooms = [];
 
 io.on('connection', function (socket) {
     console.log('Connection Made!');
