@@ -151,4 +151,8 @@ io.on('connection', function (socket) {
     socket.on('leaveRoom', function(data){
         socket.leave(data.roomName);
     });
+    socket.on('deletePlayerFromRoom', function(data){
+        var dropUser = data.username;
+        io.in(data.roomName).emit('deletePlayerFromRoom', {dropUser});
+    });
 });

@@ -14,14 +14,16 @@ public class PlayerListHandler : MonoBehaviour
     public List<Text> playerList;
     public void setPlayerList(string[] players)
     {
-        Debug.Log("player: " +players[0] + " length: " + players.Length);
+
         for (int i = 0; i < 4; i++)
         {
             playerList[i].text = "";
+            playerList[i].gameObject.SetActive(false);
         }
 
         for (int i = 0; i < players.Length; i++)
         {
+            playerList[i].gameObject.SetActive(true);
             playerList[i].text = players[i];
         }
     }

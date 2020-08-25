@@ -5,14 +5,12 @@ using SocketIO;
 using System;
 using UnityEngine.UI;
 using System.ComponentModel;
+using UnityEditor;
 
 namespace Project.Neetworking
 {
     public class NeetworkClient : SocketIOComponent
     {
-        [Header("Network Client")]
-        [SerializeField]
-        private Transform networkContainer;
 
         private string playerName;
         private string username;
@@ -114,8 +112,16 @@ namespace Project.Neetworking
                 foreach (var element in newRoom.rooms)
                 {
                     containerUI.scrollContainer.sizeDelta = new Vector2(100, containerUI.scrollContainer.rect.height + 45);
-
-                    GameObject roomFromList = Instantiate(containerUI.roomObject, containerUI.scrollContainer);
+                    GameObject roomFromList = new GameObject();
+                    if (masterRoom)
+                    {
+                        roomFromList = Instantiate(containerUI.roomObject, containerUI.scrollContainer);
+                    }
+                    else if(!masterRoom)
+                    {
+                        roomFromList = Instantiate(containerUI.roomObject, containerUI.scrollContainer);
+                    }
+                    
                     RectTransform roomRect = roomFromList.GetComponent<RectTransform>();
                     roomRect.localPosition = new Vector2(0, pos_y);
                     roomFromList.name = element.roomName;
@@ -184,6 +190,21 @@ namespace Project.Neetworking
                     }
                 }
                 masterRoom = false;
+            });
+            On("deletePlayerFromRoom", (E) =>
+            {
+                var dropUser = E.data["dropUser"].ToString();
+                dropUser = dropUser.Replace("\"", "");
+                if(username == dropUser)
+                {
+                    Debug.Log("USUWAM");
+                    Emit("leaveRoom", new JSONObject(JsonUtility.ToJson(new identity()
+                    {
+                        roomName = roomName
+                    })));
+                    containerUI.lobbyRoomUI.SetActive(false);
+                    containerUI.mainMenuUI.SetActive(true);
+                }
             });
         }
         public void OnBackInRoom()
@@ -263,6 +284,16 @@ namespace Project.Neetworking
             };
             Emit("roomConnect", new JSONObject(JsonUtility.ToJson(newRoom)));
             //pobieramy nazwe roomu z pola z nazwą, wysyłamy ją jako dane , robimy w serwerze join do danego roomu , nasłuchujemy u klienta na info o zmienie w roomie, i wysyłamy aktualną liste graczy w roomie
+        }
+        public void DeletePlayerFromRoom(string selectedUsername)
+        {
+            //wysyłamy username gracza do usunięcia, serwer rozsyła to wszystkich uczestnikow roomu, jezeli wyslany username = nazsemu username to zostajemy wyrzuceni z roomu
+            var user = new identity()
+            {
+                username = selectedUsername,
+                roomName = roomName
+            };
+            Emit("deletePlayerFromRoom", new JSONObject(JsonUtility.ToJson(user)));
         }
         private void OnApplicationQuit()
         {

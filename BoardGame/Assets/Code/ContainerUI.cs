@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class ContainerUI : MonoBehaviour
 {
     public GameObject roomObject;
+    public GameObject roomObjectMaster;
     public GameObject loginError;    
     public GameObject loginUI;
     public GameObject roomCreateUI;
