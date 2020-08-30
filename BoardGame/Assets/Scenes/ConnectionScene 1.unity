@@ -399,7 +399,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Ready
+  m_Text: Start
 --- !u!222 &65406318
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -845,18 +845,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 231176510}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 522570007}
-        m_MethodName: StartGame
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: MainGame
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &231176510
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1573,7 +1562,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd56aa359b6a9ee47ae9b28e3bcd0d85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  url: ws://192.168.100.15:80/socket.io/?EIO=4&transport=websocket
+  url: ws://lobbyboardgame.herokuapp.com:80/socket.io/?EIO=4&transport=websocket
   autoConnect: 1
   reconnectDelay: 5
   ackExpirationTime: 1800
@@ -5377,7 +5366,7 @@ GameObject:
   - component: {fileID: 1404396571}
   - component: {fileID: 1404396570}
   m_Layer: 0
-  m_Name: ReadyButton
+  m_Name: StartButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5445,18 +5434,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1404396571}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 522570007}
-        m_MethodName: IsReady
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1404396571
 MonoBehaviour:
   m_ObjectHideFlags: 0

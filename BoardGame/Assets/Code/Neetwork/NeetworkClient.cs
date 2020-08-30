@@ -6,6 +6,7 @@ using System;
 using UnityEngine.UI;
 using System.ComponentModel;
 using UnityEditor;
+using UnityEngine.SceneManagement;
 
 namespace Project.Neetworking
 {
@@ -18,11 +19,28 @@ namespace Project.Neetworking
         private string roomName;
         private int roomSize;
         private bool masterRoom = false;
-        
+        private bool isReady=false;
         private Dictionary<string, GameObject> serverObjects;
         private ContainerUI containerUI;
         // Start is called before the first frame update
 
+
+
+        public void StartGame(string scena)
+        {
+            SceneManager.LoadScene(scena);
+        }
+        public void IsReady()
+        {
+            isReady = !isReady;
+            Emit("playerReady", new JSONObject(JsonUtility.ToJson(new identity()
+            {
+                username = username,
+                roomName = roomName,
+                isReady = isReady
+            })));
+
+        }
         public override void  Start()
         {
             base.Start();
@@ -30,7 +48,6 @@ namespace Project.Neetworking
             setupEvents();
             containerUI = GameObject.Find("ContainerUI").GetComponent<ContainerUI>(); 
         }
-
         private void initialize()
         {
             serverObjects = new Dictionary<string, GameObject>();
@@ -206,6 +223,19 @@ namespace Project.Neetworking
                     containerUI.mainMenuUI.SetActive(true);
                 }
             });
+            On("playerReady", (E) =>
+            {
+                identity ident = JsonUtility.FromJson<identity>(E.data.ToString());
+                if(ident.isReady && !masterRoom)
+                {
+                    Debug.Log("isready" + ident.isReady);
+
+                }
+                else if(!ident.isReady && !masterRoom)
+                {
+                    Debug.Log("not ready" + ident.isReady);
+                }
+            });
         }
         public void OnBackInRoom()
         {
@@ -309,6 +339,9 @@ namespace Project.Neetworking
             base.Update();
         }
     }
+
+   
+
     [Serializable]
     public class GameUser
     {
@@ -339,6 +372,7 @@ namespace Project.Neetworking
         public string username;
         public string roomName;
         public bool isMaster;
+        public bool isReady;
     }
 }
 

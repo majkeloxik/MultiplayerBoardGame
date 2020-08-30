@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ConnectionScene.unity
     guid: 9bcf52634c294e8479ae8130b83cd0ee
+  - enabled: 0
+    path: Assets/Scenes/MainGame.unity
+    guid: 89ae0df73719dd942a523a0744111e5f
   m_configObjects: {}
