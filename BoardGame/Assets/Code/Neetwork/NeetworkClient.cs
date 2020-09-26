@@ -118,33 +118,20 @@ namespace Project.Neetworking
             });
             On("roomList", (E) =>
             {
+                containerUI.roomsListUI.SetActive(true);
                 Rooms newRoom = JsonUtility.FromJson<Rooms>(E.data.ToString());
-                int pos_y =0;
+
                 foreach (Transform child in containerUI.scrollContainer.transform)
                 {
                     GameObject.Destroy(child.gameObject);
                 }
-                containerUI.scrollContainer.sizeDelta = new Vector2(100, 50);
-
                 foreach (var element in newRoom.rooms)
                 {
-                    containerUI.scrollContainer.sizeDelta = new Vector2(100, containerUI.scrollContainer.rect.height + 45);
                     GameObject roomFromList = new GameObject();
-                    if (masterRoom)
-                    {
-                        roomFromList = Instantiate(containerUI.roomObject, containerUI.scrollContainer);
-                    }
-                    else if(!masterRoom)
-                    {
-                        roomFromList = Instantiate(containerUI.roomObject, containerUI.scrollContainer);
-                    }
-                    
-                    RectTransform roomRect = roomFromList.GetComponent<RectTransform>();
-                    roomRect.localPosition = new Vector2(0, pos_y);
+                    roomFromList = Instantiate(containerUI.roomObject, containerUI.scrollContainer);
                     roomFromList.name = element.roomName;
                     containerUI.roomObject.GetComponent<setRoomInLsit>().roomName.text = element.roomName.ToString();
                     containerUI.roomObject.GetComponent<setRoomInLsit>().roomSize.text = element.roomSize.ToString();
-                    pos_y -= 30;
                 }
                 containerUI.mainMenuUI.SetActive(false);
                 containerUI.roomsListUI.SetActive(true);
