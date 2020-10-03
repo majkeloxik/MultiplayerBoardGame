@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using System.ComponentModel;
 using UnityEditor;
 using UnityEngine.SceneManagement;
+using Newtonsoft.Json;
 
 namespace Project.Neetworking
 {
@@ -19,7 +20,7 @@ namespace Project.Neetworking
         private string roomName;
         private int roomSize;
         private bool masterRoom = false;
-        private bool isReady=false;
+        private bool isReady = false;
         private Dictionary<string, GameObject> serverObjects;
         private ContainerUI containerUI;
         // Start is called before the first frame update
@@ -33,7 +34,7 @@ namespace Project.Neetworking
         public void IsReady()
         {
             isReady = !isReady;
-            Emit("playerReady", new JSONObject(JsonUtility.ToJson(new identity()
+            Emit("playerReady", new JSONObject(JsonUtility.ToJson(new Identity()
             {
                 username = username,
                 roomName = roomName,
@@ -52,65 +53,59 @@ namespace Project.Neetworking
         {
             serverObjects = new Dictionary<string, GameObject>();
         }
-        public void lobbyEvent()
-        {
-            On(roomName, (E) =>
-            {
-                Debug.Log("jestem w roomie");
-            });
-        }
         public void setupEvents()
         {
             On("open", (E) =>
             {
                 Debug.Log("connection made to the server");
-            });
-            On("spawn", (E) =>
-            {
-                Debug.Log("DZIALA");
-            });
+            });   
             On("disconnected", (E) =>
             {
                 Debug.Log("disconnected");
+                Application.Quit();
             });
-            On("usernameExist", (E) =>
+            On("accountHandler", (E) =>
             {
-                Debug.Log("Username exist!");
-                containerUI.registerSucc.SetActive(false);
-                containerUI.loginError.SetActive(false);
-                containerUI.usernameExist.SetActive(true);
-            });
-            On("loginError", (E) =>
-            {
-                Debug.Log("Login Error!");
-                containerUI.registerSucc.SetActive(false);
-                containerUI.usernameExist.SetActive(false);
-                containerUI.loginError.SetActive(true);
-            });
-            On("signed", (E) =>
-            {
-                var x = E.data["username"].ToString();
-                Debug.Log("Logged in as " + x);
-                playerName = x.ToString();
-                containerUI.loginUI.SetActive(false);
-                containerUI.mainMenuUI.SetActive(true);
-            });
-            On("userRegistered", (E) =>
-            {
-                Debug.Log("User" + E.data["username"].ToString() + "registered!");
-                containerUI.loginError.SetActive(false);
-                containerUI.usernameExist.SetActive(false);
-                containerUI.registerSucc.SetActive(true);
+                var handler = E.data["handler"].ToString();
+                handler = handler.Replace("\"", "");
+
+                if (handler == "loginError")
+                {
+                    Debug.Log("Login Error!");
+                    containerUI.registerSucc.SetActive(false);
+                    containerUI.usernameExist.SetActive(false);
+                    containerUI.loginError.SetActive(true);
+                }
+                else if (handler == "signed")
+                {
+                    Debug.Log("Signed!");
+                    containerUI.loginUI.SetActive(false);
+                    containerUI.mainMenuUI.SetActive(true);
+                }
+                else if (handler == "usernameExist")
+                {
+                    Debug.Log("Username exist!");
+                    containerUI.registerSucc.SetActive(false);
+                    containerUI.loginError.SetActive(false);
+                    containerUI.usernameExist.SetActive(true);
+                }
+                else if (handler == "registred")
+                {
+                    containerUI.loginError.SetActive(false);
+                    containerUI.usernameExist.SetActive(false);
+                    containerUI.registerSucc.SetActive(true);
+                }
             });
             On("createdRoom", (E) =>
             {
                 PlayerList tablica = JsonUtility.FromJson<PlayerList>(E.data.ToString());
+                containerUI.startButton.GetComponent<Button>().interactable = false;
                 containerUI.mainMenuUI.SetActive(false);
                 containerUI.lobbyRoomMasterUI.SetActive(true);
                 containerUI.roomCreateUI.SetActive(false);
                 masterRoom = true;
+                isReady = true;
                 containerUI.masterListHandler.setPlayerList(tablica.players);
-                Debug.Log("Room created!");
             });
             On("roomError", (E) =>
             {
@@ -118,33 +113,34 @@ namespace Project.Neetworking
             });
             On("roomList", (E) =>
             {
-                Rooms newRoom = JsonUtility.FromJson<Rooms>(E.data.ToString());
-                int pos_y =0;
+                containerUI.roomsListUI.SetActive(true);
+                Rooms rooms = JsonConvert.DeserializeObject<Rooms>(E.data.ToString());
+
                 foreach (Transform child in containerUI.scrollContainer.transform)
                 {
                     GameObject.Destroy(child.gameObject);
                 }
-                containerUI.scrollContainer.sizeDelta = new Vector2(100, 50);
-
-                foreach (var element in newRoom.rooms)
+                if (rooms.rooms.Count > 0)
                 {
-                    containerUI.scrollContainer.sizeDelta = new Vector2(100, containerUI.scrollContainer.rect.height + 45);
-                    GameObject roomFromList = new GameObject();
-                    if (masterRoom)
+                    foreach (var element in rooms.rooms)
                     {
-                        roomFromList = Instantiate(containerUI.roomObject, containerUI.scrollContainer);
+                        GameObject roomFromList = Instantiate(containerUI.roomObject, containerUI.scrollContainer);
+                        roomFromList.name = element.Value.roomName;
+                        GameObject[] roomInfo = GameObject.FindGameObjectsWithTag("Respawn");
+                        foreach(GameObject x in roomInfo)
+                        {
+                            if(x.name == "RoomNameText")
+                            {
+                                x.GetComponent<Text>().text = element.Value.roomName.ToString();
+                            }
+                            else
+                            {
+                                x.GetComponent<Text>().text = element.Value.roomSize.ToString();
+                            }
+                        }
+                        containerUI.roomObject.GetComponent<setRoomInLsit>().roomName.text = element.Value.roomName.ToString();
+                        containerUI.roomObject.GetComponent<setRoomInLsit>().roomSize.text = element.Value.roomSize.ToString();
                     }
-                    else if(!masterRoom)
-                    {
-                        roomFromList = Instantiate(containerUI.roomObject, containerUI.scrollContainer);
-                    }
-                    
-                    RectTransform roomRect = roomFromList.GetComponent<RectTransform>();
-                    roomRect.localPosition = new Vector2(0, pos_y);
-                    roomFromList.name = element.roomName;
-                    containerUI.roomObject.GetComponent<setRoomInLsit>().roomName.text = element.roomName.ToString();
-                    containerUI.roomObject.GetComponent<setRoomInLsit>().roomSize.text = element.roomSize.ToString();
-                    pos_y -= 30;
                 }
                 containerUI.mainMenuUI.SetActive(false);
                 containerUI.roomsListUI.SetActive(true);
@@ -154,38 +150,51 @@ namespace Project.Neetworking
             {
                 PlayerList tablica = JsonUtility.FromJson<PlayerList>(E.data.ToString());
                 //Join to room
-                if (!containerUI.lobbyRoomUI.activeSelf && !masterRoom)
+                bool userExist = false;
+                foreach(string name in tablica.players)
+                {
+                    //TODO: add handling deleting player from room
+                    if(name.Contains(username))
+                    {
+                        userExist = true;
+                        break;
+                    }
+                }
+
+                if (!containerUI.lobbyRoomUI.activeSelf && !masterRoom && userExist)
                 {
                     containerUI.lobbyRoomUI.SetActive(true);
                     containerUI.roomsListUI.SetActive(false);
                     containerUI.playerListHandler.setPlayerList(tablica.players);
                 }
                 //Update player list in room
-                else if(containerUI.lobbyRoomMasterUI.activeSelf || containerUI.lobbyRoomUI.activeSelf)
+                else if(containerUI.lobbyRoomMasterUI.activeSelf || containerUI.lobbyRoomUI.activeSelf && userExist)
                 {
+
                     if(masterRoom)
                     {
-                        Debug.Log("dlugosc tablicy po usunieciu: " + tablica.players.Length);
-                        Debug.Log("BeforePlayerListUpdatedMaster");
-
                         containerUI.masterListHandler.setPlayerList(tablica.players);
-                        Debug.Log("PlayerListUpdatedMaster");
+                        if(tablica.players.Length < 2)
+                            containerUI.startButton.GetComponent<Button>().interactable = false;
                     }
                     else if(!masterRoom)
                     {
-                        
                         containerUI.playerListHandler.setPlayerList(tablica.players);
-                        Debug.Log("PlayerListUpdatedUser");
                     }
+                }
+                //Back to main menu ( player kicked from room )
+                else if(!userExist)
+                {
+                    containerUI.lobbyRoomUI.SetActive(false);
+                    containerUI.mainMenuUI.SetActive(true);
                 }
             });
             // drop players from room (TO DO: add msg when deleted)
             On("deleteRoom", (E) =>
             {
-                //var isMaster = JsonUtility.FromJson<identity>(E.data.ToString());
+                //Remove room handled in OnBackInRoom()
                 if (masterRoom)
                 {
-
                     if(containerUI.lobbyRoomMasterUI.activeSelf)
                     {
                         containerUI.lobbyRoomMasterUI.SetActive(false);
@@ -194,53 +203,51 @@ namespace Project.Neetworking
                 }
                 else if (!masterRoom)
                 {
-                    Emit("leaveRoom", new JSONObject(JsonUtility.ToJson(new identity()
+                    Emit("leaveRoomSocket", new JSONObject(JsonUtility.ToJson(new Identity()
                     {
                         roomName = roomName
                     })));
                     if (containerUI.lobbyRoomUI.activeSelf)
                     {
-                        //msg to players deleted when master left room
-                        Debug.Log("Room deleted by room Master");
+                        //TODO: msg to players deleted when master left room
                         containerUI.lobbyRoomUI.SetActive(false);
                         containerUI.mainMenuUI.SetActive(true);
                     }
                 }
                 masterRoom = false;
             });
-            On("deletePlayerFromRoom", (E) =>
-            {
-                var dropUser = E.data["dropUser"].ToString();
-                dropUser = dropUser.Replace("\"", "");
-                if(username == dropUser)
-                {
-                    Debug.Log("USUWAM");
-                    Emit("leaveRoom", new JSONObject(JsonUtility.ToJson(new identity()
-                    {
-                        roomName = roomName
-                    })));
-                    containerUI.lobbyRoomUI.SetActive(false);
-                    containerUI.mainMenuUI.SetActive(true);
-                }
-            });
             On("playerReady", (E) =>
             {
-                identity ident = JsonUtility.FromJson<identity>(E.data.ToString());
-                if(ident.isReady && !masterRoom)
+                Identity ident = JsonUtility.FromJson<Identity>(E.data.ToString());
+                if(masterRoom)
                 {
-                    Debug.Log("isready" + ident.isReady);
-
+                    if(ident.isReady)
+                    {
+                        containerUI.startButton.GetComponent<Button>().interactable = true;
+                    }
+                    else
+                    {
+                        containerUI.startButton.GetComponent<Button>().interactable = false;
+                    }
                 }
-                else if(!ident.isReady && !masterRoom)
+                else if(!masterRoom)
                 {
-                    Debug.Log("not ready" + ident.isReady);
+                    if(isReady)
+                    {
+                        Debug.Log("JESTEM READY");
+                    }
+                    else if(!isReady)
+                    {
+                        Debug.Log("NIE JESTEM READY");
+                    }
                 }
             });
         }
+        //Exit from room if player, if master delete room and all players from them
         public void OnBackInRoom()
         {
             //Delete room, and all users from room
-            Emit("deleteFromRoom", new JSONObject(JsonUtility.ToJson(new identity()
+            Emit("leaveRoom", new JSONObject(JsonUtility.ToJson(new Identity()
                 {
                     username = username,
                     roomName = roomName,
@@ -256,8 +263,8 @@ namespace Project.Neetworking
         }
         public void OnRegister()
         {
-            username = GameObject.Find("UserNameText").GetComponent<Text>().text;
-            password = GameObject.Find("UserPasswordText").GetComponent<Text>().text;
+            username = GameObject.Find("UsernameField").GetComponent<InputField>().text;
+            password = GameObject.Find("PasswordField").GetComponent<InputField>().text;
             if(username.Length > 0 && password.Length > 0)
             {
                 Emit("createAccount", new JSONObject(JsonUtility.ToJson(new GameUser()
@@ -273,8 +280,9 @@ namespace Project.Neetworking
         }
         public void OnLogin()
         {
-            username = GameObject.Find("UserNameText").GetComponent<Text>().text;
-            password = GameObject.Find("UserPasswordText").GetComponent<Text>().text;
+            username = GameObject.Find("UsernameField").GetComponent<InputField>().text;
+            password = GameObject.Find("PasswordField").GetComponent<InputField>().text;
+
             if(username.Length > 0 && password.Length > 0)
             {
                 Emit("signIn", new JSONObject(JsonUtility.ToJson(new GameUser()
@@ -286,9 +294,9 @@ namespace Project.Neetworking
         }   
         public void OnCreateRoom()
         {
-            roomSize = int.Parse(containerUI.roomSize.text);
-            roomName = containerUI.roomName.text;
-            if(roomName.Length > 0)
+            roomSize = int.Parse(GameObject.Find("RoomSizeDroped").GetComponent<Text>().text);
+            roomName = GameObject.Find("RoomName").GetComponent<InputField>().text;
+            if (roomName.Length > 0)
             {
                 var newRoom = new Room()
                 {
@@ -318,16 +326,21 @@ namespace Project.Neetworking
         public void DeletePlayerFromRoom(string selectedUsername)
         {
             //wysyłamy username gracza do usunięcia, serwer rozsyła to wszystkich uczestnikow roomu, jezeli wyslany username = nazsemu username to zostajemy wyrzuceni z roomu
-            var user = new identity()
+            var user = new Identity()
             {
                 username = selectedUsername,
                 roomName = roomName
             };
             Emit("deletePlayerFromRoom", new JSONObject(JsonUtility.ToJson(user)));
         }
+        public void BackToMainMenu()
+        {
+            containerUI.roomCreateUI.SetActive(false);
+            containerUI.mainMenuUI.SetActive(true);
+        }
         private void OnApplicationQuit()
         {
-            Emit("disconnect", new JSONObject(JsonUtility.ToJson(new identity()
+            Emit("disconnect", new JSONObject(JsonUtility.ToJson(new Identity()
             {
                 username = username,
                 roomName = roomName,
@@ -339,9 +352,6 @@ namespace Project.Neetworking
             base.Update();
         }
     }
-
-   
-
     [Serializable]
     public class GameUser
     {
@@ -355,19 +365,20 @@ namespace Project.Neetworking
         public string username;
         public string roomName;
         public int roomSize;
-        public List<GameUser> players;
+        public List<string> players;
     }
     [Serializable]
     public class Rooms
     {
-        public Room[] rooms;
+        public Dictionary<string, Room> rooms;
     }
+    [Serializable]
     public class PlayerList
     {
         public String[] players;
     }
     [Serializable]
-    public class identity
+    public class Identity
     {
         public string username;
         public string roomName;
@@ -375,4 +386,3 @@ namespace Project.Neetworking
         public bool isReady;
     }
 }
-
