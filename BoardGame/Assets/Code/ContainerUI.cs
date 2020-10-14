@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class ContainerUI : MonoBehaviour
 {
+    [Header("Neetwork")]
+    public GameObject neetworkObject;
     [Header("Rooms")]
     public GameObject roomObject;
     public GameObject roomObjectMaster;
@@ -27,7 +29,16 @@ public class ContainerUI : MonoBehaviour
     [Header("Lobby buttons")]
     public GameObject startButton;
     public GameObject readyButton;
+    [Header("Select character")]
+    public GameObject selectCharacter;
+    public Button characterSelected;
+    public Button warriorButton;
+    public Button archerButton;
+    public Button mageButton;
+    public GameObject allAccepted;
+    public GameObject notAllAccepted;
     [Header("Players list")]
     public PlayerListHandler playerListHandler;
     public PlayerListHandler masterListHandler;
+
 }

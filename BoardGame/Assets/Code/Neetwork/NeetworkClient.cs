@@ -13,23 +13,26 @@ namespace Project.Neetworking
 {
     public class NeetworkClient : SocketIOComponent
     {
-
-        private string playerName;
         private string username;
         private string password;
         private string roomName;
         private int roomSize;
+
         private bool masterRoom = false;
         private bool isReady = false;
-        private Dictionary<string, GameObject> serverObjects;
         private ContainerUI containerUI;
-        // Start is called before the first frame update
+
+        public string character;
 
 
-
-        public void StartGame(string scena)
+        public void StartGame()
         {
-            SceneManager.LoadScene(scena);
+            Emit("characterSelected", new JSONObject(JsonUtility.ToJson(new Identity()
+            {
+                username = username,
+                roomName = roomName
+            })));
+            containerUI.characterSelected.interactable = false;
         }
         public void IsReady()
         {
@@ -45,13 +48,8 @@ namespace Project.Neetworking
         public override void  Start()
         {
             base.Start();
-            initialize();
             setupEvents();
             containerUI = GameObject.Find("ContainerUI").GetComponent<ContainerUI>(); 
-        }
-        private void initialize()
-        {
-            serverObjects = new Dictionary<string, GameObject>();
         }
         public void setupEvents()
         {
@@ -216,12 +214,25 @@ namespace Project.Neetworking
                 }
                 masterRoom = false;
             });
-            On("playerReady", (E) =>
+            On("selectCharacter", (E) =>
             {
-                Identity ident = JsonUtility.FromJson<Identity>(E.data.ToString());
                 if(masterRoom)
                 {
-                    if(ident.isReady)
+                    containerUI.lobbyRoomMasterUI.SetActive(false);
+                    containerUI.selectCharacter.SetActive(true);
+                }
+                else
+                {
+                    containerUI.lobbyRoomUI.SetActive(false);
+                    containerUI.selectCharacter.SetActive(true);
+                }
+            });
+            On("playerReady", (E) =>
+            {
+                var result = JsonConvert.DeserializeObject<bool>(E.data["roomReady"].ToString());
+                if(masterRoom)
+                {
+                    if(result)
                     {
                         containerUI.startButton.GetComponent<Button>().interactable = true;
                     }
@@ -242,6 +253,20 @@ namespace Project.Neetworking
                     }
                 }
             });
+            On("selectedCharacters", (E) =>
+            {
+                var result = JsonConvert.DeserializeObject<bool>(E.data["allSelected"].ToString());
+                if(result)
+                {
+                    containerUI.selectCharacter.SetActive(false);
+                    containerUI.allAccepted.SetActive(true);
+                }
+                else
+                {
+                    containerUI.selectCharacter.SetActive(false);
+                    containerUI.notAllAccepted.SetActive(true);
+                }
+            });
         }
         //Exit from room if player, if master delete room and all players from them
         public void OnBackInRoom()
@@ -260,6 +285,13 @@ namespace Project.Neetworking
                 containerUI.mainMenuUI.SetActive(true);
                 roomName = "";
             }
+        }
+        public void SelectCharacter()
+        {
+            Emit("selectCharacter", new JSONObject(JsonUtility.ToJson(new Identity()
+            {
+                roomName = roomName
+            })));
         }
         public void OnRegister()
         {
@@ -282,7 +314,6 @@ namespace Project.Neetworking
         {
             username = GameObject.Find("UsernameField").GetComponent<InputField>().text;
             password = GameObject.Find("PasswordField").GetComponent<InputField>().text;
-
             if(username.Length > 0 && password.Length > 0)
             {
                 Emit("signIn", new JSONObject(JsonUtility.ToJson(new GameUser()

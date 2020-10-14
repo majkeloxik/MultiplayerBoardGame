@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - RoomInfo
+  - ContainerUI
+  - Networking
   layers:
   - Default
   - TransparentFX
