@@ -56,7 +56,17 @@ namespace Project.Neetworking
             On("open", (E) =>
             {
                 Debug.Log("connection made to the server");
-            });   
+            });
+            On("auth", (E) =>
+            {
+                var newToken = E.data["token"].ToString();
+                Debug.Log(newToken);
+                newToken = newToken.Replace("\"", "");
+                Token token = new Token();
+                token.token = newToken;
+                Debug.Log(JsonUtility.ToJson(token));
+                Emit("authenticate", new JSONObject(JsonUtility.ToJson(token)));
+            });
             On("disconnected", (E) =>
             {
                 Debug.Log("disconnected");
@@ -415,5 +425,10 @@ namespace Project.Neetworking
         public string roomName;
         public bool isMaster;
         public bool isReady;
+    }
+
+    public class Token
+    {
+        public string token;
     }
 }
