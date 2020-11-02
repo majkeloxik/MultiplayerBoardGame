@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="4d1b8b45-d1d7-4f00-a813-01fb3b27e261" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/Assets/Code/ContainerUI.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/ContainerUI.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/DeletePlayer.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/DeletePlayer.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/Neetwork.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/Neetwork/NeetworkClient.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/Neetwork/NeetworkClient.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/PlayerListHandler.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/PlayerListHandler.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/Room.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/Room.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/RoomController.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/RoomController.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/SetCharacter.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/SetCharacter.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/addRoomToLobby.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/addRoomToLobby.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/setRoomInLsit.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Code/setRoomInLsit.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameControl.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameControl/Field.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameControl/Field.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameControl/GameController.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameControl/GameController.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameControl/Player.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/GameControl/Player.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Capsule.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Capsule.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Cube.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Cube.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Sphere.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/Sphere.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/ConnectionScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/ConnectionScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/MainGame.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MainGame.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/MainGame.unity.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/MainGame.unity.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Tree.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Tree.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Tree_Textures.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Tree_Textures/diffuse.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Tree_Textures/diffuse.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Tree_Textures/normal_specular.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Tree_Textures/normal_specular.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Tree_Textures/shadow.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Tree_Textures/shadow.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Tree_Textures/translucency_gloss.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Tree_Textures/translucency_gloss.png.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectVersion.txt" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectVersion.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/engine.io-client/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/node_modules/engine.io-client/CHANGELOG.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/engine.io-client/engine.io.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/node_modules/engine.io-client/engine.io.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/engine.io-client/lib/transports/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/node_modules/engine.io-client/lib/transports/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/engine.io-client/lib/transports/polling-xhr.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/node_modules/engine.io-client/lib/transports/polling-xhr.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/engine.io-client/node_modules/debug/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/node_modules/engine.io-client/node_modules/debug/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/engine.io-client/node_modules/debug/dist/debug.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/engine.io-client/node_modules/debug/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/node_modules/engine.io-client/node_modules/debug/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/engine.io-client/node_modules/debug/src/browser.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/node_modules/engine.io-client/node_modules/debug/src/browser.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/engine.io-client/node_modules/debug/src/common.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/engine.io-client/node_modules/debug/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/node_modules/engine.io-client/node_modules/debug/src/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/engine.io-client/node_modules/debug/src/node.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/node_modules/engine.io-client/node_modules/debug/src/node.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/engine.io-client/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/node_modules/engine.io-client/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/parseqs/.npmignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/parseqs/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/node_modules/parseqs/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/parseuri/.npmignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/parseuri/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/node_modules/parseuri/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/parseuri/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/node_modules/parseuri/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/parseuri/test.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/node_modules/parseuri/test.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/dist/socket.io.dev.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/dist/socket.io.dev.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/dist/socket.io.dev.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/dist/socket.io.dev.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/dist/socket.io.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/dist/socket.io.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/dist/socket.io.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/dist/socket.io.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/dist/socket.io.slim.dev.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/dist/socket.io.slim.dev.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/dist/socket.io.slim.dev.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/dist/socket.io.slim.dev.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/dist/socket.io.slim.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/dist/socket.io.slim.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/dist/socket.io.slim.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/dist/socket.io.slim.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/lib/manager.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/lib/manager.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/lib/socket.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/lib/socket.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/node_modules/debug/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/node_modules/debug/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/node_modules/debug/dist/debug.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/node_modules/debug/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/node_modules/debug/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/node_modules/debug/src/browser.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/node_modules/debug/src/browser.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/node_modules/debug/src/common.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/node_modules/debug/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/node_modules/debug/src/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/node_modules/debug/src/node.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/node_modules/debug/src/node.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/debug/.coveralls.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/debug/.eslintrc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/debug/.npmignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/debug/.travis.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/debug/CHANGELOG.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/debug/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/debug/Makefile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/debug/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/debug/karma.conf.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/debug/node.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/debug/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/debug/src/browser.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/debug/src/debug.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/debug/src/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/debug/src/node.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/ms/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/ms/license.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/ms/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/node_modules/socket.io-parser/node_modules/ms/readme.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/node_modules/socket.io-parser/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/node_modules/socket.io-parser/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/node_modules/socket.io-client/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Server/package.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/Code/Field/ObjContainer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Code/Player/PlayerController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Code/Field/FieldController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/SocketIO/JSONObject/Editor/JSONChecker.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Code/DontDestroyOnLoad.cs" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/Assets/Code/Neetwork/NeetworkClient.cs" />
+        <option value="$PROJECT_DIR$/Assets/Code/NewBehaviourScript.cs" />
+        <option value="$PROJECT_DIR$/Assets/Code/DeletePlayer.cs" />
+        <option value="$PROJECT_DIR$/Assets/FieldController.cs" />
+        <option value="$PROJECT_DIR$/Assets/Code/PlayerController.cs" />
+        <option value="$PROJECT_DIR$/Assets/Fields.cs" />
+        <option value="$PROJECT_DIR$/Assets/SocketIO/JSONObject/Editor/JSONChecker.cs" />
+        <option value="$PROJECT_DIR$/Assets/SocketIO/WebsocketSharp/Net/HttpDigestIdentity.cs" />
+        <option value="$PROJECT_DIR$/Assets/Code/Neetwork/NetworkClient.cs" />
+        <option value="$PROJECT_DIR$/Assets/DontDestroyOnLoad.cs" />
+        <option value="$PROJECT_DIR$/Assets/ObjectsContainer.cs" />
+        <option value="$PROJECT_DIR$/Assets/Code/Player/PlayerController.cs" />
+        <option value="$PROJECT_DIR$/Assets/Code/Field/FieldController.cs" />
+        <option value="$PROJECT_DIR$/Assets/Code/Field/ObjContainer.cs" />
+        <option value="$PROJECT_DIR$/Assets/Code/Network/NetworkClient.cs" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="1ivqW7wItdw9X0KnqkpcxP3TwEE" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="Discover.Launch.Via.Unity" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="do_not_show_solution_notification" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/Packages" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.C#" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
+    <configuration name="Standalone Player" type="RunUnityExe" factoryName="Unity Executable">
+      <option name="EXE_PATH" value="$USER_HOME$/Builds/16_10_1205/14_10.x86_64" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="$USER_HOME$/Builds/16_10_1205" />
+      <option name="PASS_PARENT_ENVS" value="1" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Attach to Unity Editor &amp; Play" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="UNITY_ATTACH_AND_PLAY" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+      <option name="allowRunningInParallel" value="false" />
+      <option name="listenPortForConnections" value="false" />
+      <option name="pid" />
+      <option name="selectedOptions">
+        <set />
+      </option>
+      <method v="2" />
+    </configuration>
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+      <option name="allowRunningInParallel" value="false" />
+      <option name="listenPortForConnections" value="false" />
+      <option name="pid" />
+      <option name="selectedOptions">
+        <set />
+      </option>
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4d1b8b45-d1d7-4f00-a813-01fb3b27e261" name="Default Changelist" comment="" />
+      <created>1602798446343</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1602798446343</updated>
+      <workItem from="1602798461369" duration="1018000" />
+      <workItem from="1602799514698" duration="1037000" />
+      <workItem from="1602800699933" duration="13000" />
+      <workItem from="1602801007712" duration="1458000" />
+      <workItem from="1602802544411" duration="81000" />
+      <workItem from="1602802825453" duration="306000" />
+      <workItem from="1602803489193" duration="8000" />
+      <workItem from="1602803888495" duration="215000" />
+      <workItem from="1602804142085" duration="574000" />
+      <workItem from="1602804851274" duration="269000" />
+      <workItem from="1602875147413" duration="469000" />
+      <workItem from="1602875806348" duration="1495000" />
+      <workItem from="1602877387166" duration="754000" />
+      <workItem from="1602878197571" duration="128000" />
+      <workItem from="1602878489262" duration="3118000" />
+      <workItem from="1602882740321" duration="3394000" />
+      <workItem from="1602932940685" duration="12919000" />
+      <workItem from="1602958899994" duration="5611000" />
+      <workItem from="1602964654552" duration="1720000" />
+      <workItem from="1603037081785" duration="69000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnityProjectConfiguration" hasMinimizedUI="true" />
+  <component name="UnityUnitTestConfiguration" currentTestLauncher="EditMode" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="2595" y="291" width="632" height="481" key="#Context_Actions" timestamp="1602875193416">
+      <screen x="1920" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2595" y="291" width="632" height="481" key="#Context_Actions/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1602875193416" />
+    <state x="2197" y="184" width="800" height="719" key="#Plugins" timestamp="1602802932560">
+      <screen x="1920" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2197" y="184" width="800" height="719" key="#Plugins/72.27.1848.1053/1920.0.1920.1080@1920.0.1920.1080" timestamp="1602802932560" />
+    <state x="2060" y="198" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1602802584133">
+      <screen x="1920" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2060" y="198" key="#com.intellij.execution.impl.EditConfigurationsDialog/72.27.1848.1053/1920.0.1920.1080@1920.0.1920.1080" timestamp="1602802584133" />
+    <state x="172" y="127" width="1648" height="853" key="DiffContextDialog" timestamp="1602801509156">
+      <screen x="72" y="27" width="3768" height="1053" />
+    </state>
+    <state x="172" y="127" width="1648" height="853" key="DiffContextDialog/72.27.3768.1053@72.27.3768.1053" timestamp="1602801509156" />
+    <state x="2655" y="294" width="581" height="491" key="FileChooserDialogImpl" timestamp="1602882807664">
+      <screen x="1920" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2655" y="294" width="581" height="491" key="FileChooserDialogImpl/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1602882807664" />
+    <state x="2655" y="294" key="FileChooserDialogImpl/72.27.1848.1053/1920.0.1920.1080@1920.0.1920.1080" timestamp="1602802612585" />
+    <state x="779" y="314" width="424" height="491" key="FileChooserDialogImpl/72.27.1848.1053@72.27.1848.1053" timestamp="1602800189512" />
+    <state x="2635" y="259" width="551" height="595" key="RiderGenerateDialog" timestamp="1602882869171">
+      <screen x="1920" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2635" y="259" width="551" height="595" key="RiderGenerateDialog/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1602882869171" />
+    <state x="141" y="188" width="1779" height="737" key="SettingsEditor" timestamp="1602957073979">
+      <screen x="72" y="27" width="1848" height="1053" />
+    </state>
+    <state x="1992" y="165" width="1848" height="737" key="SettingsEditor/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1602884138497" />
+    <state x="141" y="188" width="1779" height="737" key="SettingsEditor/1920.0.1920.1080/72.27.1848.1053@72.27.1848.1053" timestamp="1602957073979" />
+    <state x="2861" y="165" key="SettingsEditor/72.27.1848.1053/1920.0.1920.1080@1920.0.1920.1080" timestamp="1602802980578" />
+    <state x="485" y="188" width="1022" height="737" key="SettingsEditor/72.27.1848.1053@72.27.1848.1053" timestamp="1602800481081" />
+    <state x="1920" y="188" width="1920" height="737" key="SettingsEditor/72.27.3768.1053@72.27.3768.1053" timestamp="1602802118337" />
+    <state x="404" y="260" width="672" height="662" key="search.everywhere.popup" timestamp="1602945299516">
+      <screen x="72" y="27" width="1848" height="1053" />
+    </state>
+    <state x="2265" y="239" width="672" height="678" key="search.everywhere.popup/1920.0.1920.1080/0.27.1920.1053@1920.0.1920.1080" timestamp="1602879934933" />
+    <state x="404" y="260" width="672" height="662" key="search.everywhere.popup/1920.0.1920.1080/72.27.1848.1053@72.27.1848.1053" timestamp="1602945299516" />
+    <state x="2265" y="239" width="672" height="678" key="search.everywhere.popup/72.27.1848.1053/1920.0.1920.1080@1920.0.1920.1080" timestamp="1602802944823" />
+  </component>
+</project>

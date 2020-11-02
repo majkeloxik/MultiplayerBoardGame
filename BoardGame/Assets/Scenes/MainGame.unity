@@ -1345,56 +1345,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 150384831}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &160468695
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 160468698}
-  - component: {fileID: 160468697}
-  m_Layer: 0
-  m_Name: CodeNeetworking
-  m_TagString: Networking
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &160468697
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 160468695}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd56aa359b6a9ee47ae9b28e3bcd0d85, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  url: ws://127.0.0.1:1050/socket.io/?EIO=4&transport=websocket
-  autoConnect: 1
-  reconnectDelay: 5
-  ackExpirationTime: 1800
-  pingInterval: 25
-  pingTimeout: 60
-  character: 
---- !u!4 &160468698
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 160468695}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 346.02344, y: 364.71017, z: 8.806885}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &234873376
 GameObject:
   m_ObjectHideFlags: 0
@@ -11724,9 +11674,9 @@ MonoBehaviour:
   - {fileID: 35552214}
   - {fileID: 1270341822}
   - {fileID: 1030861433}
-  archerCharacter: {fileID: 1821438256256483277, guid: fbc2bd1490228d57796ff28a9024b67c,
+  archerCharacter: {fileID: 4358583533006501927, guid: fbc2bd1490228d57796ff28a9024b67c,
     type: 3}
-  warriorCharacter: {fileID: 6167532074460276013, guid: 13148d7ed5dcca772ab937a159913d51,
+  warriorCharacter: {fileID: 560270623749151931, guid: 13148d7ed5dcca772ab937a159913d51,
     type: 3}
-  mageCharacter: {fileID: 8057296413636693181, guid: c859dd164ac2f257b99bdfcea69ba8e5,
+  mageCharacter: {fileID: 9078182886424747066, guid: c859dd164ac2f257b99bdfcea69ba8e5,
     type: 3}
