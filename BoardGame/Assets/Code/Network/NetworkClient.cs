@@ -1,35 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Code.Player;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 using SocketIO;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using Code.Field;
-using Code.Player;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace Code.Network
-
 {
     public class NetworkClient : SocketIOComponent
     {
         private string username;
+
+        //TODO: clear password after login ?
         private string password;
+
         private string roomName;
         private int roomSize;
-        
+
         private bool masterRoom = false;
         private bool isReady = false;
+
         [SerializeField]
         private ContainerUI containerUI;
 
+        [SerializeField]
+        private ObjContainer objContainer;
+
+        private ObjContainer ObjContainer
+        {
+            get
+            {
+                return objContainer = (objContainer == null) ? FindObjectOfType<ObjContainer>() : objContainer;
+            }
+        }
+
         public string character;
 
-        public override void  Start()
+        public override void Start()
         {
             base.Start();
             SetupEvents();
-            //containerUI = GameObject.Find("ContainerUI").GetComponent<ContainerUI>(); 
         }
 
         private void SetupEvents()
@@ -41,11 +54,11 @@ namespace Code.Network
             On("auth", (E) =>
             {
                 var newToken = E.data["token"].ToString();
-                Debug.Log(newToken);
                 newToken = newToken.Replace("\"", "");
-                Token token = new Token();
-                token.token = newToken;
-                Debug.Log(JsonUtility.ToJson(token));
+                Token token = new Token
+                {
+                    token = newToken
+                };
                 Emit("authenticate", new JSONObject(JsonUtility.ToJson(token)));
             });
             On("disconnected", (E) =>
@@ -78,7 +91,7 @@ namespace Code.Network
                     containerUI.SetActiveUI("registred", true);
                 }
             });
-            //TODO: change playerList name
+            //TODO: change playerList
             On("createdRoom", (E) =>
             {
                 PlayerList tablica = JsonUtility.FromJson<PlayerList>(E.data.ToString());
@@ -109,9 +122,9 @@ namespace Code.Network
                         GameObject roomFromList = Instantiate(playerInRoom, playersContainer);
                         roomFromList.name = element.Value.roomName;
                         GameObject[] roomInfo = GameObject.FindGameObjectsWithTag("Respawn");
-                        foreach(GameObject x in roomInfo)
+                        foreach (GameObject x in roomInfo)
                         {
-                            if(x.name == "RoomNameText")
+                            if (x.name == "RoomNameText")
                             {
                                 x.GetComponent<Text>().text = element.Value.roomName.ToString();
                             }
@@ -126,7 +139,7 @@ namespace Code.Network
                 }
                 containerUI.SetActiveUI("roomList", true);
             });
-            //Join to room, or if is in room update player list
+            //Join to room, or if player is in room update player list
             On("playerList", (E) =>
             {
                 PlayerList tablica = JsonUtility.FromJson<PlayerList>(E.data.ToString());
@@ -135,38 +148,37 @@ namespace Code.Network
 
                 //Join to room
                 bool userExist = false;
-                foreach(string name in tablica.players)
+                foreach (string name in tablica.players)
                 {
                     //TODO: add handling deleting player from room
-                    if(name.Contains(username))
+                    if (name.Contains(username))
                     {
                         userExist = true;
                         break;
                     }
                 }
-            //player join with room
-            if (!lobbyRoom.activeSelf && !masterRoom && userExist)
+                //player join with room
+                if (!lobbyRoom.activeSelf && !masterRoom && userExist)
                 {
                     containerUI.SetActiveUI("joinToRoom", true);
                     containerUI.SetPlayerList("player", tablica);
                 }
                 //Update player list in room
-                else if(masterLobbyRoom.activeSelf || lobbyRoom.activeSelf && userExist)
+                else if (masterLobbyRoom.activeSelf || lobbyRoom.activeSelf && userExist)
                 {
-
-                    if(masterRoom)
+                    if (masterRoom)
                     {
                         containerUI.SetPlayerList("master", tablica);
                         if (tablica.players.Length < 2)
                             containerUI.SetInteractableButton("startGameButton", false);
                     }
-                    else if(!masterRoom)
+                    else if (!masterRoom)
                     {
                         containerUI.SetPlayerList("player", tablica);
                     }
                 }
                 //Back to main menu ( player kicked from room )
-                else if(!userExist)
+                else if (!userExist)
                 {
                     containerUI.SetActiveUI("kickedFromRoom", true);
                 }
@@ -179,8 +191,7 @@ namespace Code.Network
                 //Remove room handled in OnBackInRoom()
                 if (masterRoom)
                 {
-
-                    if(masterLobbyRoom.activeSelf)
+                    if (masterLobbyRoom.activeSelf)
                     {
                         containerUI.SetActiveUI("deleteRoomMaster", true);
                     }
@@ -202,7 +213,7 @@ namespace Code.Network
             });
             On("selectCharacter", (E) =>
             {
-                if(masterRoom)
+                if (masterRoom)
                 {
                     containerUI.SetActiveUI("selectCharacterMaster", true);
                 }
@@ -214,9 +225,9 @@ namespace Code.Network
             On("playerReady", (E) =>
             {
                 var result = JsonConvert.DeserializeObject<bool>(E.data["roomReady"].ToString());
-                if(masterRoom)
+                if (masterRoom)
                 {
-                    if(result)
+                    if (result)
                     {
                         containerUI.SetInteractableButton("startGameButton", true);
                     }
@@ -225,28 +236,34 @@ namespace Code.Network
                         containerUI.SetInteractableButton("startGameButton", false);
                     }
                 }
-                else if(!masterRoom)
+                else if (!masterRoom)
                 {
-                    if(isReady)
+                    if (isReady)
                     {
                         Debug.Log("JESTEM READY");
                     }
-                    else if(!isReady)
+                    else if (!isReady)
                     {
                         Debug.Log("NIE JESTEM READY");
                     }
                 }
             });
+
             //TODO: handling change scene to main game
             On("selectedCharacters", (E) =>
             {
                 var result = JsonConvert.DeserializeObject<bool>(E.data["allSelected"].ToString());
-                if(result)
+
+                if (result)
                 {
                     SceneManager.LoadScene("MainGame", LoadSceneMode.Single);
+
+                    //Wait for generate world
+
                     Emit("createGame", new JSONObject(JsonUtility.ToJson(new Identity()
                     {
-                        roomName = roomName
+                        roomName = roomName,
+                        isMaster = masterRoom
                     })));
                 }
                 else
@@ -254,78 +271,124 @@ namespace Code.Network
                     containerUI.SetActiveUI("allSelected", false);
                 }
             });
+            //GAME
+
             On("createGame", (E) =>
             {
-                var allPlayers = JsonConvert.DeserializeObject<GameProperties>(E.data.ToString());
-                Debug.Log(allPlayers.gameRoom.Count);
-                Debug.Log(E.data.ToString());
+                //Generate MAP
+                //board - board representation as matrix
+                var boardArrayString = E.data["board"].ToString();
+                var board = JsonConvert.DeserializeObject<int[][]>(boardArrayString);
+
+                FindObjectOfType<MapGenerator>().GenerateMap(board);
+
+                //Spawn players
+                GameProperties allPlayers = new GameProperties
+                {
+                    gameRoom = JsonConvert.DeserializeObject<Dictionary<string, PlayerProperties>>(E.data["gameRoom"].ToString())
+                };
+
                 int indexToClone = 0;
+                GameObject playersCont = new GameObject("Players");
                 foreach (var element in allPlayers.gameRoom)
                 {
-                    Debug.Log("inside");
-                    //TODO: 2. spawnujemy posctaci z przypisanymi im wartosciami z serwera w kolejnosci odczytywania 
+                    //TODO: 2. spawnujemy posctaci z przypisanymi im wartosciami z serwera w kolejnosci odczytywania
                     GameObject newCharacter;
-                    Debug.Log("after character initial");
 
-                    ObjContainer objContainer = GameObject.Find("ContainerObj").GetComponent<ObjContainer>();
-                    Debug.Log("after ContainerObj find");
-                    Vector3 spawnPosition = objContainer.startFields[indexToClone].transform.position;
-                    Debug.Log("aftetr spawnPosition");
+                    Vector3 spawnPosition = ObjContainer.MapGenerator.fieldsList[0].GetComponent<FieldInfo>().slots[indexToClone].transform.position;
                     if (element.Value.character.characterClass == "mage")
                     {
-                        Debug.Log("mage");
-                        newCharacter = Instantiate(Resources.Load<GameObject>("Prefabs/mageCharacter"), spawnPosition, Quaternion.identity);
-
+                        newCharacter = Instantiate(Resources.Load<GameObject>("Prefabs/mageCharacter"), spawnPosition, Quaternion.identity, playersCont.transform);
                     }
                     else if (element.Value.character.characterClass == "archer")
                     {
-                        Debug.Log("aarcher");
-                        newCharacter = Instantiate(Resources.Load<GameObject>("Prefabs/archerCharacter"), spawnPosition, Quaternion.identity);
+                        newCharacter = Instantiate(Resources.Load<GameObject>("Prefabs/archerCharacter"), spawnPosition, Quaternion.identity, playersCont.transform);
                     }
                     else
                     {
-                        Debug.Log("warrior");
-                        newCharacter = Instantiate(Resources.Load<GameObject>("Prefabs/warriorCharacter"), spawnPosition, Quaternion.identity);
+                        newCharacter = Instantiate(Resources.Load<GameObject>("Prefabs/warriorCharacter"), spawnPosition, Quaternion.identity, playersCont.transform);
                     }
-                    Debug.Log("before get component");
 
                     newCharacter.name = element.Key;
                     newCharacter.GetComponent<PlayerController>().playerProperties = element.Value;
                     newCharacter.GetComponent<PlayerController>().usernameText.text = element.Key;
-                    Debug.Log(indexToClone);
                     indexToClone++;
                 }
             });
+            On("playerTurn", (E) =>
+            {
+                var actualPlayer = E.data["actualPlayer"].ToString();
+                actualPlayer = actualPlayer.Replace("\"", "");
+
+                //Set who actual move
+                ObjContainer.actualPlayer = actualPlayer;
+
+                //set and show who move (image)
+                ObjContainer.SetWhoMove(actualPlayer);
+                ObjContainer.whoMoveImage.SetActive(true);
+
+                //TODO: set camera on player who move
+
+                if (actualPlayer == username)
+                {
+                    ObjContainer.dice.interactable = true;
+                }
+                else
+                {
+                    //Players watch player who move ? 
+                }
+            });
+            On("possibleMoves", (E) =>
+            {
+                //All see dice Value
+                string diceValue = E.data["diceV"].ToString();
+                ObjContainer.SetDiceValue(diceValue);
+                //Only player who move see where can go 
+                if(ObjContainer.actualPlayer == username)
+                {
+                    var possibleMovesString = E.data["possibleMoves"].ToString();
+                    var possibleMoves = JsonConvert.DeserializeObject<int[]>(possibleMovesString);
+                    ObjContainer.PossibleMoves(true, possibleMoves);
+                }
+            });
+            On("playerMoveTo", (E) =>
+            {
+                //set destination data.actualplayer
+            });
         }
+
         //Exit from room if player, if master delete room and all players from them
         public void OnBackInRoom()
         {
             //Delete room, and all users from room
             Emit("leaveRoom", new JSONObject(JsonUtility.ToJson(new Identity()
-                {
-                    username = username,
-                    roomName = roomName,
-                    isMaster = masterRoom
-                })));
+            {
+                username = username,
+                roomName = roomName,
+                isMaster = masterRoom
+            })));
             //Left room, and refresh player list for other users
-            if(!masterRoom)
+            if (!masterRoom)
             {
                 containerUI.SetActiveUI("leaveRoom", true);
                 roomName = "";
             }
         }
+
         public void SelectCharacter()
         {
             Emit("selectCharacter", new JSONObject(JsonUtility.ToJson(new Identity()
             {
-                roomName = roomName
+                roomName = roomName,
+                isMaster = masterRoom
             })));
         }
+
         public void OnRegister()
         {
             username = GameObject.Find("UsernameField").GetComponent<InputField>().text;
             password = GameObject.Find("PasswordField").GetComponent<InputField>().text;
-            if(username.Length > 0 && password.Length > 0)
+            if (username.Length > 0 && password.Length > 0)
             {
                 Emit("createAccount", new JSONObject(JsonUtility.ToJson(new GameUser()
                 {
@@ -338,11 +401,14 @@ namespace Code.Network
                 Debug.Log("Create account ERROR");
             }
         }
+
         public void OnLogin()
         {
+            //TODO: correct login handling
             username = GameObject.Find("UsernameField").GetComponent<InputField>().text;
             password = GameObject.Find("PasswordField").GetComponent<InputField>().text;
-            if(username.Length > 0 && password.Length > 0)
+
+            if (username.Length > 0 && password.Length > 0)
             {
                 Emit("signIn", new JSONObject(JsonUtility.ToJson(new GameUser()
                 {
@@ -350,7 +416,8 @@ namespace Code.Network
                     password = password
                 })));
             }
-        }   
+        }
+
         public void OnCreateRoom()
         {
             roomSize = int.Parse(GameObject.Find("RoomSizeDroped").GetComponent<Text>().text);
@@ -363,14 +430,16 @@ namespace Code.Network
                     roomName = roomName,
                     roomSize = roomSize
                 };
-                
+
                 Emit("roomCreate", new JSONObject(JsonUtility.ToJson(newRoom)));
             }
         }
+
         public void OnRoomList()
         {
             Emit("getRoomList");
         }
+
         public void OnRoomConnect(string selectedRoomName)
         {
             roomName = selectedRoomName;
@@ -382,6 +451,7 @@ namespace Code.Network
             Emit("roomConnect", new JSONObject(JsonUtility.ToJson(newRoom)));
             //pobieramy nazwe roomu z pola z nazwą, wysyłamy ją jako dane , robimy w serwerze join do danego roomu , nasłuchujemy u klienta na info o zmienie w roomie, i wysyłamy aktualną liste graczy w roomie
         }
+
         public void DeletePlayerFromRoom(string selectedUsername)
         {
             //wysyłamy username gracza do usunięcia, serwer rozsyła to wszystkich uczestnikow roomu, jezeli wyslany username = nazsemu username to zostajemy wyrzuceni z roomu
@@ -392,31 +462,35 @@ namespace Code.Network
             };
             Emit("deletePlayerFromRoom", new JSONObject(JsonUtility.ToJson(user)));
         }
+
         public void BackToMainMenu()
         {
-            containerUI.SetActiveUI("backToMainMenuFromCreator", true);  
+            containerUI.SetActiveUI("backToMainMenuFromCreator", true);
             //containerUI.roomCreateUI.SetActive(false);
             //containerUI.mainMenuUI.SetActive(true);
         }
-        private new void OnApplicationQuit()
+
+        public void DiceValue()
         {
-            Emit("disconnect", new JSONObject(JsonUtility.ToJson(new Identity()
+            Emit("diceValue", new JSONObject(JsonUtility.ToJson(new Identity()
             {
                 username = username,
-                roomName = roomName,
-                isMaster = masterRoom
+                roomName = roomName
             })));
         }
+
         public void StartGame()
         {
             Emit("characterSelected", new JSONObject(JsonUtility.ToJson(new Identity()
             {
+                isMaster = masterRoom,
                 username = username,
                 roomName = roomName,
                 character = character
             })));
             containerUI.SetInteractableButton("characterSelected", false);
         }
+
         public void IsReady()
         {
             isReady = !isReady;
@@ -426,19 +500,47 @@ namespace Code.Network
                 roomName = roomName,
                 isReady = isReady
             })));
-
         }
+        public void FieldSelected(int fieldID)
+        {
+            ObjContainer.PlayerMovedTo(fieldID);
+            Emit("playerMoveTo", new JSONObject(JsonUtility.ToJson(new Identity()
+            {
+                username = username,
+                roomName = roomName,
+                fieldID = fieldID
+            })));
+        }
+
         public override void Update()
         {
             base.Update();
         }
+
+        private new void OnApplicationQuit()
+        {
+            Emit("disconnect", new JSONObject(JsonUtility.ToJson(new Identity()
+            {
+                username = username,
+                roomName = roomName,
+                isMaster = masterRoom
+            })));
+        }
     }
+
+    [Serializable]
+    public class Board
+    {
+        public int[][] board;
+    }
+
     [Serializable]
     public class GameUser
     {
         public string username;
         public string password;
     }
+
     [Serializable]
     public class Room
     {
@@ -448,6 +550,7 @@ namespace Code.Network
         public int roomSize;
         public List<string> players;
     }
+
     [Serializable]
     public class Character
     {
@@ -459,8 +562,9 @@ namespace Code.Network
         public Ability ability1;
         public Ability ability2;
         public Ability ability3;
-        //character class 
+        //character class
     }
+
     [Serializable]
     public class Ability
     {
@@ -469,7 +573,7 @@ namespace Code.Network
         public int cooldown;
         public int dmgValue;
 
-        public Ability(string abName, int abLevel, int cdr, int dmgV )
+        public Ability(string abName, int abLevel, int cdr, int dmgV)
         {
             name = abName;
             abilityLevel = abLevel;
@@ -484,10 +588,10 @@ namespace Code.Network
         public Properties properties;
         public Character character;
     }
+
     [Serializable]
     public class Properties
     {
-        
         public int exp;
         public int gold;
         public int actualField;
@@ -499,16 +603,19 @@ namespace Code.Network
     {
         public Dictionary<string, PlayerProperties> gameRoom;
     }
+
     [Serializable]
     public class Rooms
     {
         public Dictionary<string, Room> rooms;
     }
+
     [Serializable]
     public class PlayerList
     {
         public String[] players;
     }
+
     [Serializable]
     public class Identity
     {
@@ -517,6 +624,7 @@ namespace Code.Network
         public bool isMaster;
         public bool isReady;
         public string character;
+        public int fieldID;
     }
 
     public class Token

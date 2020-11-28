@@ -13,16 +13,14 @@ public class setRoomInLsit : MonoBehaviour
     public Text roomName;
     public Text roomSize;
     [FormerlySerializedAs("neetworkClient")] public NetworkClient networkClient;
-    public string name;
 
     private void Start()
     {
-        networkClient = GameObject.Find("CodeNeetworking").GetComponent<NetworkClient>();
+        networkClient = GameObject.Find("CodeNetworking").GetComponent<NetworkClient>();
     }
     public void SendRoomName()
     {
-        name = roomName.text;
-        networkClient.OnRoomConnect(name);
+        networkClient.OnRoomConnect(roomName.text);
     }
 }
 

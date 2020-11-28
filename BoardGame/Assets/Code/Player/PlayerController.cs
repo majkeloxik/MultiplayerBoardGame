@@ -16,7 +16,6 @@ namespace Code.Player
 		public Text usernameText;
 		private void Start()
 		{
-			fields = GameObject.Find("Fields").GetComponent<Fields>();
 			myNavMeshAgent = GetComponent<NavMeshAgent>();
 		}
 
