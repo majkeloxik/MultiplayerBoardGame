@@ -20,6 +20,16 @@ public class MapGenerator : MonoBehaviour
     public List<GameObject> possibleFields;
 
     public Random random = new Random();
+    [SerializeField]
+    private ObjContainer objContainer;
+
+    private ObjContainer ObjContainer
+    {
+        get
+        {
+            return objContainer = (objContainer == null) ? FindObjectOfType<ObjContainer>() : objContainer;
+        }
+    }
 
     public void GenerateMap(int[][] map)
     {
@@ -35,6 +45,7 @@ public class MapGenerator : MonoBehaviour
                 }
             }
         }
+        ObjContainer.fieldsList = fieldsList;
     }
     public void SpawnField(int i, int j, int value)
     {

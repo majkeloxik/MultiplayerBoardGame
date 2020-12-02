@@ -1,11 +1,13 @@
 ﻿using Code.Network;
 using JetBrains.Annotations;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ObjContainer : MonoBehaviour
 {
     public string actualPlayer;
+    public GameObject actualPlayerObj;
 
 
     public GameObject archerCharacter;
@@ -17,16 +19,30 @@ public class ObjContainer : MonoBehaviour
     public Text diceValue;
     public Button dice;
 
+    public GameObject playerAction;
+    //start positions
     public GameObject[] startFields;
     public Material mainFieldMaterial;
     private MapGenerator mapGenerator;
+    //fields id where we can move
     public int[] activeFields;
 
+    public List <GameObject> playersList;
+    public List<GameObject> fieldsList;
+    public int whereMove;
     public MapGenerator MapGenerator
     {
         get
         {
             return mapGenerator = (mapGenerator == null) ? FindObjectOfType<MapGenerator>() : mapGenerator;
+        }
+    }
+    public ActionController actionController;
+    public ActionController ActionController
+    {
+        get
+        {
+            return actionController = (actionController == null) ? FindObjectOfType<ActionController>() : actionController;
         }
     }
 
@@ -54,7 +70,7 @@ public class ObjContainer : MonoBehaviour
     {
         NetworkClient.DiceValue();
     }
-
+    //Set field color on red, if possiebled move is on that field
     public void PossibleMoves(bool value, int[] possFields)
     {
         if (value)
@@ -62,8 +78,8 @@ public class ObjContainer : MonoBehaviour
             activeFields = possFields;
             foreach (var i in possFields)
             {
-                int indexOfPossField = MapGenerator.fieldsList.FindIndex(t => t.GetComponent<FieldInfo>().id == i);
-                MapGenerator.fieldsList[indexOfPossField].GetComponent<Renderer>().material.color = Color.red;
+                int indexOfPossField = fieldsList.FindIndex(t => t.GetComponent<FieldInfo>().id == i);
+                fieldsList[indexOfPossField].GetComponent<Renderer>().material.color = Color.red;
             }
         }
     }
@@ -74,19 +90,19 @@ public class ObjContainer : MonoBehaviour
             if(i == id)
             {
                 int indexOfPossField = MapGenerator.fieldsList.FindIndex(t => t.GetComponent<FieldInfo>().id == i);
-                MapGenerator.fieldsList[indexOfPossField].GetComponent<Renderer>().material.color = Color.green;
+                fieldsList[indexOfPossField].GetComponent<Renderer>().material.color = Color.green;
             }
             else
             {
                 int indexOfPossField = MapGenerator.fieldsList.FindIndex(t => t.GetComponent<FieldInfo>().id == i);
-                MapGenerator.fieldsList[indexOfPossField].GetComponent<Renderer>().material.color = Color.yellow;
+                fieldsList[indexOfPossField].GetComponent<Renderer>().material.color = Color.yellow;
             }
 
         }
     }
     public void PlayerEndTurn()
     {
-        foreach(var field in MapGenerator.fieldsList)
+        foreach(var field in fieldsList)
         {
             field.GetComponent<Renderer>().material.color = Color.yellow;
         }

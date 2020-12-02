@@ -2100,12 +2100,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd56aa359b6a9ee47ae9b28e3bcd0d85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  url: ws://127.0.0.1:1051/socket.io/?EIO=4&transport=websocket
+  url: ws://192.168.100.2:1051/socket.io/?EIO=4&transport=websocket
   autoConnect: 1
   reconnectDelay: 5
   ackExpirationTime: 1800
   pingInterval: 25
   pingTimeout: 60
+  username: 
   containerUI: {fileID: 2091830912}
   objContainer: {fileID: 0}
   character: 

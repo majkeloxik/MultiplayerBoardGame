@@ -12,7 +12,7 @@ namespace Code.Network
 {
     public class NetworkClient : SocketIOComponent
     {
-        private string username;
+        public string username;
 
         //TODO: clear password after login ?
         private string password;
@@ -47,6 +47,10 @@ namespace Code.Network
 
         private void SetupEvents()
         {
+            On("queueTest", (E) =>
+            {
+                Debug.LogError(E.data["index"].ToString());
+            });
             On("open", (E) =>
             {
                 Debug.Log("connection made to the server");
@@ -240,11 +244,11 @@ namespace Code.Network
                 {
                     if (isReady)
                     {
-                        Debug.Log("JESTEM READY");
+                        //Debug.Log("READY");
                     }
                     else if (!isReady)
                     {
-                        Debug.Log("NIE JESTEM READY");
+                        //Debug.Log("NOT READY");
                     }
                 }
             });
@@ -292,7 +296,6 @@ namespace Code.Network
                 GameObject playersCont = new GameObject("Players");
                 foreach (var element in allPlayers.gameRoom)
                 {
-                    //TODO: 2. spawnujemy posctaci z przypisanymi im wartosciami z serwera w kolejnosci odczytywania
                     GameObject newCharacter;
 
                     Vector3 spawnPosition = ObjContainer.MapGenerator.fieldsList[0].GetComponent<FieldInfo>().slots[indexToClone].transform.position;
@@ -312,9 +315,12 @@ namespace Code.Network
                     newCharacter.name = element.Key;
                     newCharacter.GetComponent<PlayerController>().playerProperties = element.Value;
                     newCharacter.GetComponent<PlayerController>().usernameText.text = element.Key;
+                    ObjContainer.playersList.Add(newCharacter);
                     indexToClone++;
                 }
             });
+
+
             On("playerTurn", (E) =>
             {
                 var actualPlayer = E.data["actualPlayer"].ToString();
@@ -325,6 +331,10 @@ namespace Code.Network
 
                 //set and show who move (image)
                 ObjContainer.SetWhoMove(actualPlayer);
+                //setactive false to handling minimized window
+                ObjContainer.PlayerEndTurn();
+                ObjContainer.playerAction.SetActive(false);
+                ObjContainer.whoMoveImage.SetActive(false);
                 ObjContainer.whoMoveImage.SetActive(true);
 
                 //TODO: set camera on player who move
@@ -335,7 +345,7 @@ namespace Code.Network
                 }
                 else
                 {
-                    //Players watch player who move ? 
+                    ObjContainer.dice.interactable = false;
                 }
             });
             On("possibleMoves", (E) =>
@@ -351,9 +361,24 @@ namespace Code.Network
                     ObjContainer.PossibleMoves(true, possibleMoves);
                 }
             });
+            //Player change position on selected before
             On("playerMoveTo", (E) =>
             {
-                //set destination data.actualplayer
+                string playerMove = E.data["playerMove"].ToString();
+                playerMove = playerMove.Replace("\"", "");
+               
+                int playerIndex = ObjContainer.playersList.FindIndex(x => x.name ==playerMove);
+               
+                int whereMove = Convert.ToInt32(E.data["whereMove"].ToString());
+               
+                int indexWhereMove = ObjContainer.fieldsList.FindIndex(t => t.GetComponent<FieldInfo>().id == whereMove);
+                //Field id , place selected by player
+                ObjContainer.whereMove = whereMove;
+                //Before change position add type and id action ( after character enter on poss field, set active )
+                ObjContainer.ActionController.SetActionInfo(1,0,8);
+                ObjContainer.playersList[playerIndex].transform.position = ObjContainer.fieldsList[indexWhereMove].transform.position;
+
+                //TODO: handling when start action ( colider on field // wait for the time)
             });
         }
 
@@ -374,7 +399,6 @@ namespace Code.Network
                 roomName = "";
             }
         }
-
         public void SelectCharacter()
         {
             Emit("selectCharacter", new JSONObject(JsonUtility.ToJson(new Identity()
@@ -400,6 +424,7 @@ namespace Code.Network
             {
                 Debug.Log("Create account ERROR");
             }
+            password = "";
         }
 
         public void OnLogin()
@@ -435,6 +460,7 @@ namespace Code.Network
             }
         }
 
+
         public void OnRoomList()
         {
             Emit("getRoomList");
@@ -466,8 +492,6 @@ namespace Code.Network
         public void BackToMainMenu()
         {
             containerUI.SetActiveUI("backToMainMenuFromCreator", true);
-            //containerUI.roomCreateUI.SetActive(false);
-            //containerUI.mainMenuUI.SetActive(true);
         }
 
         public void DiceValue()
@@ -511,7 +535,18 @@ namespace Code.Network
                 fieldID = fieldID
             })));
         }
+        public void PlayerAction()
+        {
+            Emit("playerAction", new JSONObject(JsonUtility.ToJson(new Identity()
+            {
+                username = username,
+                roomName = roomName
+            })));
+        }
+        public void EndTurn()
+        {
 
+        }
         public override void Update()
         {
             base.Update();

@@ -6,9 +6,9 @@ using UnityEngine;
 
 public class FieldInfo : MonoBehaviour
 {
+    //class holding info about field, slots on fields, and set clickable field when is possible to move.
     public int id;
     public GameObject[] slots;
-    public int[] activeFields;
 
 
     private NetworkClient networkClient;
@@ -28,20 +28,32 @@ public class FieldInfo : MonoBehaviour
         }
     }
 
-
-    //TODO: correct this on touch ? or sth
+    //TODO: correct this on touch ? or sth AND after click disabled that option 
     public void OnMouseDown()
     {
-        Debug.LogError("ASDASDSAS");
         if (Array.Exists(ObjContainer.activeFields, element => element == id))
         {
-
-            Debug.Log("Jestem aktywny");
             NetworkClient.FieldSelected(id);
         }
         else
         {
-            Debug.Log("Nie jestem aktywny");
+
+        }
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        //run action
+        if(id == ObjContainer.whereMove)
+        {
+            if (other.name == ObjContainer.actualPlayer && NetworkClient.username == ObjContainer.actualPlayer)
+            {
+                ObjContainer.playerAction.SetActive(true);
+                NetworkClient.PlayerAction();   
+            }
+            else
+            {
+                ObjContainer.playerAction.SetActive(true);
+            }
         }
     }
 }
