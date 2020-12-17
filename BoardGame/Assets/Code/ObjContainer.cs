@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class ObjContainer : MonoBehaviour
 {
+    public string username;
     public string actualPlayer;
     public GameObject actualPlayerObj;
 
@@ -13,6 +14,7 @@ public class ObjContainer : MonoBehaviour
     public GameObject archerCharacter;
     public GameObject warriorCharacter;
     public GameObject mageCharacter;
+    
 
     public GameObject whoMoveImage;
     public Text whoMoveText;
@@ -30,6 +32,14 @@ public class ObjContainer : MonoBehaviour
     public List <GameObject> playersList;
     public List<GameObject> fieldsList;
     public int whereMove;
+    private CameraController cameraController;
+    public CameraController CameraController
+    {
+        get
+        {
+            return cameraController = (cameraController == null) ? FindObjectOfType<CameraController>() : cameraController;
+        }
+    }
     public MapGenerator MapGenerator
     {
         get
@@ -58,6 +68,8 @@ public class ObjContainer : MonoBehaviour
 
     public void SetWhoMove(string player)
     {
+        actualPlayer = player;
+        actualPlayerObj = playersList.Find(x => x.name == player);
         whoMoveText.text = player + " move now";
     }
 
@@ -110,5 +122,9 @@ public class ObjContainer : MonoBehaviour
     public void SelectPossibleMoves(int[] possMoves)
     {
 
+    }
+    private void Awake()
+    {
+        username = NetworkClient.username;
     }
 }

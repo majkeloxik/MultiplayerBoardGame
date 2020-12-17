@@ -1,22 +1,28 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class setActiveTEST : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+
+    private void Start()
     {
+        int nb = 5;
+        int typeID = Convert.ToInt32(nb.ToString());
+        Debug.Log(typeID);
 
     }
-    private void OnEnable()
+    private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("1");
+        Debug.Log(collision.transform.position);
+        var tmp = collision.transform.position;
+        transform.position = tmp * 2;
     }
-
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        
+        var tmp = other.transform.position;
+        transform.position = -tmp;
     }
 }

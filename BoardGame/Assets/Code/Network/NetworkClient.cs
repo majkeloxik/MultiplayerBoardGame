@@ -1,10 +1,11 @@
-﻿using Code.Player;
+﻿//using Code.Player;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using SocketIO;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -47,6 +48,10 @@ namespace Code.Network
 
         private void SetupEvents()
         {
+            On("disconnect", (E) =>
+            {
+                Debug.LogError("SERVER DISCCONECTED");
+            });
             On("queueTest", (E) =>
             {
                 Debug.LogError(E.data["index"].ToString());
@@ -294,24 +299,51 @@ namespace Code.Network
 
                 int indexToClone = 0;
                 GameObject playersCont = new GameObject("Players");
+
+                float startPos = -800f;
+                float avatarPos;
+                if (allPlayers.gameRoom.Count == 2)
+                {
+                    avatarPos = 1600f;
+                }
+                else if(allPlayers.gameRoom.Count == 3)
+                {
+                    avatarPos = 800f;
+                }
+                else
+                {
+                    avatarPos = 400f;
+                }
+                var GameUI = GameObject.FindGameObjectWithTag("MainGameUI");
                 foreach (var element in allPlayers.gameRoom)
                 {
                     GameObject newCharacter;
-
+                    RawImage newPlayerInfo;
+                    //Spawn player on first field and on correct slot
                     Vector3 spawnPosition = ObjContainer.MapGenerator.fieldsList[0].GetComponent<FieldInfo>().slots[indexToClone].transform.position;
+
                     if (element.Value.character.characterClass == "mage")
                     {
                         newCharacter = Instantiate(Resources.Load<GameObject>("Prefabs/mageCharacter"), spawnPosition, Quaternion.identity, playersCont.transform);
+                        newPlayerInfo = Instantiate(Resources.Load<RawImage>("Prefabs/PlayerInfo"), new Vector3(startPos + indexToClone * avatarPos, 430f, 0f), Quaternion.identity, GameUI.transform);
+                        newPlayerInfo.transform.localPosition = new Vector3(startPos + indexToClone * avatarPos,430f, 0f);
+                        newPlayerInfo.texture = Resources.Load<Texture>("Avatars/avatar1");
                     }
                     else if (element.Value.character.characterClass == "archer")
                     {
                         newCharacter = Instantiate(Resources.Load<GameObject>("Prefabs/archerCharacter"), spawnPosition, Quaternion.identity, playersCont.transform);
+                        newPlayerInfo = Instantiate(Resources.Load<RawImage>("Prefabs/PlayerInfo"), new Vector3(startPos + indexToClone * avatarPos, 430f, 0f), Quaternion.identity, GameUI.transform);
+                        newPlayerInfo.transform.localPosition = new Vector3(startPos + indexToClone * avatarPos,430f, 0f);
+                        newPlayerInfo.texture = Resources.Load<Texture>("Avatars/avatar2"); 
                     }
                     else
                     {
                         newCharacter = Instantiate(Resources.Load<GameObject>("Prefabs/warriorCharacter"), spawnPosition, Quaternion.identity, playersCont.transform);
+                        newPlayerInfo = Instantiate(Resources.Load<RawImage>("Prefabs/PlayerInfo"), new Vector3(startPos + indexToClone * avatarPos, 430f, 0f), Quaternion.identity, GameUI.transform);
+                        newPlayerInfo.transform.localPosition = new Vector3(startPos + indexToClone * avatarPos,430f, 0f);
+                        newPlayerInfo.texture = Resources.Load<Texture>("Avatars/avatar3");
                     }
-
+                    newPlayerInfo.name = "PlayerInfo_" + element.Key;
                     newCharacter.name = element.Key;
                     newCharacter.GetComponent<PlayerController>().playerProperties = element.Value;
                     newCharacter.GetComponent<PlayerController>().usernameText.text = element.Key;
@@ -319,24 +351,20 @@ namespace Code.Network
                     indexToClone++;
                 }
             });
-
-
             On("playerTurn", (E) =>
             {
-                var actualPlayer = E.data["actualPlayer"].ToString();
+                var actualPlayer = E.data["whoMove"].ToString();
                 actualPlayer = actualPlayer.Replace("\"", "");
 
-                //Set who actual move
-                ObjContainer.actualPlayer = actualPlayer;
-
-                //set and show who move (image)
-                ObjContainer.SetWhoMove(actualPlayer);
-                //setactive false to handling minimized window
-                ObjContainer.PlayerEndTurn();
                 ObjContainer.playerAction.SetActive(false);
                 ObjContainer.whoMoveImage.SetActive(false);
+                ObjContainer.SetWhoMove(actualPlayer);
+
+                ObjContainer.PlayerEndTurn();
+
                 ObjContainer.whoMoveImage.SetActive(true);
 
+                ObjContainer.CameraController.SetCamera();
                 //TODO: set camera on player who move
 
                 if (actualPlayer == username)
@@ -350,8 +378,15 @@ namespace Code.Network
             });
             On("possibleMoves", (E) =>
             {
+                
+                var isRandom = JsonConvert.DeserializeObject<bool>(E.data["isRandom"].ToString());
+                if (isRandom && ObjContainer.dice.interactable)
+                {
+                    ObjContainer.dice.interactable = false;
+                }
                 //All see dice Value
                 string diceValue = E.data["diceV"].ToString();
+
                 ObjContainer.SetDiceValue(diceValue);
                 //Only player who move see where can go 
                 if(ObjContainer.actualPlayer == username)
@@ -364,22 +399,43 @@ namespace Code.Network
             //Player change position on selected before
             On("playerMoveTo", (E) =>
             {
-                string playerMove = E.data["playerMove"].ToString();
+                int whereMove = Convert.ToInt32(E.data["whereMove"].ToString());
+                var isRandom = JsonConvert.DeserializeObject<bool>(E.data["isRandom"].ToString());
+                if(isRandom)
+                {
+                    ObjContainer.PlayerMovedTo(whereMove);
+                }
+
+                string playerMove = E.data["whoMove"].ToString();
                 playerMove = playerMove.Replace("\"", "");
                
-                int playerIndex = ObjContainer.playersList.FindIndex(x => x.name ==playerMove);
+                int playerIndex = ObjContainer.playersList.FindIndex(x => x.name == playerMove);
                
-                int whereMove = Convert.ToInt32(E.data["whereMove"].ToString());
-               
+                
+        
                 int indexWhereMove = ObjContainer.fieldsList.FindIndex(t => t.GetComponent<FieldInfo>().id == whereMove);
                 //Field id , place selected by player
                 ObjContainer.whereMove = whereMove;
-                //Before change position add type and id action ( after character enter on poss field, set active )
-                ObjContainer.ActionController.SetActionInfo(1,0,8);
-                ObjContainer.playersList[playerIndex].transform.position = ObjContainer.fieldsList[indexWhereMove].transform.position;
 
+                int typeID = Convert.ToInt32(E.data["typeID"].ToString());
+                int actionID = Convert.ToInt32(E.data["actionID"].ToString());
+                //Before change position add type and id action ( after character enter on poss field, set active )
+                ObjContainer.ActionController.SetActionInfo(1,1,8);
+                ObjContainer.playersList[playerIndex].GetComponent<NavMeshAgent>().SetDestination(ObjContainer.fieldsList[indexWhereMove].transform.position);
                 //TODO: handling when start action ( colider on field // wait for the time)
             });
+            On("showAction", (E) =>
+            {
+                if(username == ObjContainer.actualPlayer)
+                {
+                    ObjContainer.playerAction.SetActive(true);
+                }
+                else
+                {
+                    ObjContainer.playerAction.SetActive(true);
+                }
+            });
+
         }
 
         //Exit from room if player, if master delete room and all players from them

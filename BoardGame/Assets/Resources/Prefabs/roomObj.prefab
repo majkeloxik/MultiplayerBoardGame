@@ -195,7 +195,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: -63.3}
-  m_SizeDelta: {x: 100, y: 25.275696}
+  m_SizeDelta: {x: 125, y: 25.275696}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3839304676791957693
 CanvasRenderer:
@@ -248,8 +248,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roomName: {fileID: 4060707367371279330}
   roomSize: {fileID: 1583332264217711888}
-  neetworkClient: {fileID: 0}
-  name: 
+  networkClient: {fileID: 0}
 --- !u!114 &835559516
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -18,11 +18,11 @@ public class MapGenerator : MonoBehaviour
     public GameObject fields;
     public List<GameObject> fieldsList;
     public List<GameObject> possibleFields;
-
     public Random random = new Random();
     [SerializeField]
     private ObjContainer objContainer;
-
+    [Header("Test map generator")]
+    public bool testMap = false;
     private ObjContainer ObjContainer
     {
         get
@@ -30,7 +30,13 @@ public class MapGenerator : MonoBehaviour
             return objContainer = (objContainer == null) ? FindObjectOfType<ObjContainer>() : objContainer;
         }
     }
-
+    private void Start()
+    {
+        if(testMap)
+        {
+            TestGenerator();
+        }
+    }
     public void GenerateMap(int[][] map)
     {
         int value;
@@ -50,14 +56,13 @@ public class MapGenerator : MonoBehaviour
     public void SpawnField(int i, int j, int value)
     {
         GameObject newField; 
-        newField = Instantiate(field, new Vector3(j*(1.1f), 0, i*(1.1f)), Quaternion.identity, fields.transform);
+        newField = Instantiate(field, new Vector3(j*(1.1f),0, i*(1.1f)), Quaternion.identity, fields.transform);
         newField.name = "Field_" + value;
         newField.GetComponent<FieldInfo>().id = value;
 
         newField.GetComponent<Renderer>().material.color = Color.yellow;
         fieldsList.Add(newField);
     }
-
     public void TestGenerator()
     {
         mapArray = new int[rows][];
@@ -81,8 +86,6 @@ public class MapGenerator : MonoBehaviour
                 }
             }
         }
-        Debug.Log(mapArray.ToString());
         GenerateMap(mapArray);
     }
-
 }

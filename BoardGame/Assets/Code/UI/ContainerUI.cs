@@ -58,6 +58,9 @@ public class ContainerUI : MonoBehaviour
         {
             case "characterSelected":
                 characterSelected.interactable = value;
+                warriorButton.interactable = value;
+                archerButton.interactable = value;
+                mageButton.interactable = value;
                 break;
 
             case "startGameButton":

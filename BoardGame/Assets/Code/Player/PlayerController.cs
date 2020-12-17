@@ -1,34 +1,28 @@
-﻿using System.Collections.Generic;
-using Code.Network;
+﻿using Code.Network;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
-namespace Code.Player
+public class PlayerController : MonoBehaviour
 {
-	public class PlayerController : MonoBehaviour
-	{
-		public Fields fields;
-		public PlayerProperties playerProperties;
-		public NavMeshAgent myNavMeshAgent;
-		public List<int> moveOptions;
-		public int moveTo;
-		public Text usernameText;
-		private void Start()
-		{
-			myNavMeshAgent = GetComponent<NavMeshAgent>();
-		}
+    public Fields fields;
+    public PlayerProperties playerProperties;
+    public NavMeshAgent myNavMeshAgent;
+    public List<int> moveOptions;
+    public int moveTo;
 
-		public void MoveToField()
-		{
-			foreach (var element in fields.fields)
-			{
-				if(element.id == moveTo)
-				{
-					myNavMeshAgent.SetDestination(element.position);
-					break;
-				}
-			}
-		}
-	}
+    public Camera playerCamera;
+    [Header("Player info UI")]
+    public Text stats;
+    public Text usernameText;
+
+    private void Start()
+    {
+        myNavMeshAgent = GetComponent<NavMeshAgent>();
+    }
+    public void SetPlayerInfo()
+    {
+
+    }
 }

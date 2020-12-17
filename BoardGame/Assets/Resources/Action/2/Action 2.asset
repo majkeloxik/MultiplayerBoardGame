@@ -9,17 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f21be6d07de83804480c877939b80b4f, type: 3}
-  m_Name: Action 1
+  m_Script: {fileID: 11500000, guid: c18f309dd3420e64cba5d2ae9109995f, type: 3}
+  m_Name: Action 2
   m_EditorClassIdentifier: 
-  id: 1
-  type: 1
-  title: Title 1
-  description: Descrip 1
-  attribute:
-  - Gold
-  - Gold
-  value: 1800000018000000
-  integrateWith:
-  - 
+  id: 0
+  type: 
+  title: 
+  description: 
+  attribute: []
+  value: 
+  integrateWith: []
+  correctAnswer: 
+  wrongAnswer: 
   artBackground: {fileID: 0}

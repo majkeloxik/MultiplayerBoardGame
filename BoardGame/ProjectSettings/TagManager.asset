@@ -8,6 +8,7 @@ TagManager:
   - ContainerUI
   - Networking
   - ObjContainer
+  - MainGameUI
   layers:
   - Default
   - TransparentFX
