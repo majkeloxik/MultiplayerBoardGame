@@ -51,6 +51,7 @@ public class ContainerUI : MonoBehaviour
     [SerializeField] private PlayerListHandler playerListHandler;
 
     [SerializeField] private PlayerListHandler masterListHandler;
+    [SerializeField] private GameObject[] playersInRoomObj;
 
     public void SetInteractableButton(string buttonName, bool value)
     {

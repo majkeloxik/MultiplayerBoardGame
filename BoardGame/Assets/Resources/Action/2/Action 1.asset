@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c18f309dd3420e64cba5d2ae9109995f, type: 3}
   m_Name: Action 1
   m_EditorClassIdentifier: 
-  id: 0
-  type: 
+  id: 1
+  type: 2
   title: 
   description: 
   attribute: []

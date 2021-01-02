@@ -47,12 +47,12 @@ public class FieldInfo : MonoBehaviour
         {
             if (other.name == ObjContainer.actualPlayer && NetworkClient.username == ObjContainer.actualPlayer)
             {
-                ObjContainer.playerAction.SetActive(true);
+               // ObjContainer.playerAction.SetActive(true);
                 //NetworkClient.PlayerAction();   
             }
             else
             {
-                ObjContainer.playerAction.SetActive(true);
+              //  ObjContainer.playerAction.SetActive(true);
             }
         }
     }

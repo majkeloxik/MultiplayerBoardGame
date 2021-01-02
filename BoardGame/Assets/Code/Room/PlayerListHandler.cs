@@ -11,6 +11,7 @@ public class PlayerListHandler : MonoBehaviour
     public Text player3;
     public Text player4;
     public List<Text> playerList;
+    public List<GameObject> playerBackground;
     public void setPlayerList(string[] players)
     {
 
@@ -18,12 +19,14 @@ public class PlayerListHandler : MonoBehaviour
         {
             playerList[i].text = "";
             playerList[i].gameObject.SetActive(false);
+            playerBackground[i].SetActive(false);
         }
 
         for (int i = 0; i < players.Length; i++)
         {
             playerList[i].gameObject.SetActive(true);
             playerList[i].text = players[i];
+            playerBackground[i].SetActive(true);
         }
     }
 }

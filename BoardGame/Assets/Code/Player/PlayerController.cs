@@ -15,14 +15,14 @@ public class PlayerController : MonoBehaviour
     public Camera playerCamera;
     [Header("Player info UI")]
     public Text stats;
-    public Text usernameText;
-
+    public string usernameText;
+    [Header("Level")]
+    public int level = 1;
+    public int actualExp = 0;
+    public int maxExp = 100;
+    public int increaseMaxExp = 25;
     private void Start()
     {
         myNavMeshAgent = GetComponent<NavMeshAgent>();
-    }
-    public void SetPlayerInfo()
-    {
-
     }
 }

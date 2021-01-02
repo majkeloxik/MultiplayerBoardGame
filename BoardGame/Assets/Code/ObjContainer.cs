@@ -7,15 +7,16 @@ using UnityEngine.UI;
 public class ObjContainer : MonoBehaviour
 {
     public string username;
-    public string actualPlayer;
-    public GameObject actualPlayerObj;
 
 
+    [Header("Characters prefabs")]
     public GameObject archerCharacter;
     public GameObject warriorCharacter;
     public GameObject mageCharacter;
     
-
+    [Header("Actual turn statistics")]
+    public string actualPlayer;
+    public GameObject actualPlayerObj;
     public GameObject whoMoveImage;
     public Text whoMoveText;
     public Text diceValue;
@@ -55,7 +56,6 @@ public class ObjContainer : MonoBehaviour
             return actionController = (actionController == null) ? FindObjectOfType<ActionController>() : actionController;
         }
     }
-
     private NetworkClient networkClient;
 
     public NetworkClient NetworkClient
@@ -126,5 +126,15 @@ public class ObjContainer : MonoBehaviour
     private void Awake()
     {
         username = NetworkClient.username;
+    }
+    public void SetLevelValue(int playerIndex)
+    {
+        var playerController = playersList[playerIndex].GetComponent<PlayerController>();
+
+        if(playerController.playerProperties.properties.exp >= playerController.maxExp)
+        {
+            playerController.level++;
+            playerController.maxExp = (playerController.maxExp * 2) + playerController.increaseMaxExp;
+        }
     }
 }

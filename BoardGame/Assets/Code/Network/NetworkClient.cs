@@ -1,5 +1,4 @@
 ﻿//using Code.Player;
-using JetBrains.Annotations;
 using Newtonsoft.Json;
 using SocketIO;
 using System;
@@ -51,10 +50,6 @@ namespace Code.Network
             On("disconnect", (E) =>
             {
                 Debug.LogError("SERVER DISCCONECTED");
-            });
-            On("queueTest", (E) =>
-            {
-                Debug.LogError(E.data["index"].ToString());
             });
             On("open", (E) =>
             {
@@ -124,7 +119,7 @@ namespace Code.Network
                 {
                     GameObject.Destroy(child.gameObject);
                 }
-                if (rooms.rooms.Count > 0)
+                if (rooms.rooms.Count >= 0)
                 {
                     foreach (var element in rooms.rooms)
                     {
@@ -137,13 +132,11 @@ namespace Code.Network
                             {
                                 x.GetComponent<Text>().text = element.Value.roomName.ToString();
                             }
-                            else
-                            {
-                                x.GetComponent<Text>().text = element.Value.roomSize.ToString();
-                            }
                         }
+                        containerUI.GetPlayerContainer().sizeDelta = new Vector2(containerUI.GetPlayerContainer().sizeDelta.x, containerUI.GetPlayerContainer().sizeDelta.x + 200);
+
                         playerInRoom.GetComponent<setRoomInLsit>().roomName.text = element.Value.roomName.ToString();
-                        playerInRoom.GetComponent<setRoomInLsit>().roomSize.text = element.Value.roomSize.ToString();
+                        playerInRoom.GetComponent<setRoomInLsit>().roomSize.text = element.Value.roomSize.ToString();   
                     }
                 }
                 containerUI.SetActiveUI("roomList", true);
@@ -257,7 +250,6 @@ namespace Code.Network
                     }
                 }
             });
-
             //TODO: handling change scene to main game
             On("selectedCharacters", (E) =>
             {
@@ -281,7 +273,6 @@ namespace Code.Network
                 }
             });
             //GAME
-
             On("createGame", (E) =>
             {
                 //Generate MAP
@@ -306,7 +297,7 @@ namespace Code.Network
                 {
                     avatarPos = 1600f;
                 }
-                else if(allPlayers.gameRoom.Count == 3)
+                else if (allPlayers.gameRoom.Count == 3)
                 {
                     avatarPos = 800f;
                 }
@@ -326,29 +317,37 @@ namespace Code.Network
                     {
                         newCharacter = Instantiate(Resources.Load<GameObject>("Prefabs/mageCharacter"), spawnPosition, Quaternion.identity, playersCont.transform);
                         newPlayerInfo = Instantiate(Resources.Load<RawImage>("Prefabs/PlayerInfo"), new Vector3(startPos + indexToClone * avatarPos, 430f, 0f), Quaternion.identity, GameUI.transform);
-                        newPlayerInfo.transform.localPosition = new Vector3(startPos + indexToClone * avatarPos,430f, 0f);
+                        newPlayerInfo.transform.localPosition = new Vector3(startPos + indexToClone * avatarPos, 430f, 0f);
                         newPlayerInfo.texture = Resources.Load<Texture>("Avatars/avatar1");
                     }
                     else if (element.Value.character.characterClass == "archer")
                     {
                         newCharacter = Instantiate(Resources.Load<GameObject>("Prefabs/archerCharacter"), spawnPosition, Quaternion.identity, playersCont.transform);
                         newPlayerInfo = Instantiate(Resources.Load<RawImage>("Prefabs/PlayerInfo"), new Vector3(startPos + indexToClone * avatarPos, 430f, 0f), Quaternion.identity, GameUI.transform);
-                        newPlayerInfo.transform.localPosition = new Vector3(startPos + indexToClone * avatarPos,430f, 0f);
-                        newPlayerInfo.texture = Resources.Load<Texture>("Avatars/avatar2"); 
+                        newPlayerInfo.transform.localPosition = new Vector3(startPos + indexToClone * avatarPos, 430f, 0f);
+                        newPlayerInfo.texture = Resources.Load<Texture>("Avatars/avatar2");
                     }
                     else
                     {
                         newCharacter = Instantiate(Resources.Load<GameObject>("Prefabs/warriorCharacter"), spawnPosition, Quaternion.identity, playersCont.transform);
                         newPlayerInfo = Instantiate(Resources.Load<RawImage>("Prefabs/PlayerInfo"), new Vector3(startPos + indexToClone * avatarPos, 430f, 0f), Quaternion.identity, GameUI.transform);
-                        newPlayerInfo.transform.localPosition = new Vector3(startPos + indexToClone * avatarPos,430f, 0f);
+                        newPlayerInfo.transform.localPosition = new Vector3(startPos + indexToClone * avatarPos, 430f, 0f);
                         newPlayerInfo.texture = Resources.Load<Texture>("Avatars/avatar3");
                     }
+
                     newPlayerInfo.name = "PlayerInfo_" + element.Key;
+                    newPlayerInfo.GetComponent<PlayerInfoUI>().playerNameText.text = element.Key;
                     newCharacter.name = element.Key;
+                    Debug.Log("AFTER NAME KEY");
                     newCharacter.GetComponent<PlayerController>().playerProperties = element.Value;
-                    newCharacter.GetComponent<PlayerController>().usernameText.text = element.Key;
+
+                    newCharacter.GetComponent<PlayerController>().usernameText = element.Key;
                     ObjContainer.playersList.Add(newCharacter);
+
+                    newPlayerInfo.GetComponent<PlayerInfoUI>().SetPlayerInfo(indexToClone);
                     indexToClone++;
+
+                    Debug.LogError("PLAYER ADDED");
                 }
             });
             On("playerTurn", (E) =>
@@ -358,6 +357,7 @@ namespace Code.Network
 
                 ObjContainer.playerAction.SetActive(false);
                 ObjContainer.whoMoveImage.SetActive(false);
+
                 ObjContainer.SetWhoMove(actualPlayer);
 
                 ObjContainer.PlayerEndTurn();
@@ -365,7 +365,6 @@ namespace Code.Network
                 ObjContainer.whoMoveImage.SetActive(true);
 
                 ObjContainer.CameraController.SetCamera();
-                //TODO: set camera on player who move
 
                 if (actualPlayer == username)
                 {
@@ -378,7 +377,6 @@ namespace Code.Network
             });
             On("possibleMoves", (E) =>
             {
-                
                 var isRandom = JsonConvert.DeserializeObject<bool>(E.data["isRandom"].ToString());
                 if (isRandom && ObjContainer.dice.interactable)
                 {
@@ -388,8 +386,8 @@ namespace Code.Network
                 string diceValue = E.data["diceV"].ToString();
 
                 ObjContainer.SetDiceValue(diceValue);
-                //Only player who move see where can go 
-                if(ObjContainer.actualPlayer == username)
+                //Only player who move see where can go
+                if (ObjContainer.actualPlayer == username)
                 {
                     var possibleMovesString = E.data["possibleMoves"].ToString();
                     var possibleMoves = JsonConvert.DeserializeObject<int[]>(possibleMovesString);
@@ -401,18 +399,16 @@ namespace Code.Network
             {
                 int whereMove = Convert.ToInt32(E.data["whereMove"].ToString());
                 var isRandom = JsonConvert.DeserializeObject<bool>(E.data["isRandom"].ToString());
-                if(isRandom)
+                if (isRandom)
                 {
                     ObjContainer.PlayerMovedTo(whereMove);
                 }
 
                 string playerMove = E.data["whoMove"].ToString();
                 playerMove = playerMove.Replace("\"", "");
-               
+
                 int playerIndex = ObjContainer.playersList.FindIndex(x => x.name == playerMove);
-               
-                
-        
+
                 int indexWhereMove = ObjContainer.fieldsList.FindIndex(t => t.GetComponent<FieldInfo>().id == whereMove);
                 //Field id , place selected by player
                 ObjContainer.whereMove = whereMove;
@@ -420,13 +416,16 @@ namespace Code.Network
                 int typeID = Convert.ToInt32(E.data["typeID"].ToString());
                 int actionID = Convert.ToInt32(E.data["actionID"].ToString());
                 //Before change position add type and id action ( after character enter on poss field, set active )
-                ObjContainer.ActionController.SetActionInfo(1,1,8);
+                ObjContainer.ActionController.SetActionInfo(typeID, actionID);
+                Debug.Log("BEFORE SET DESTINATION");
                 ObjContainer.playersList[playerIndex].GetComponent<NavMeshAgent>().SetDestination(ObjContainer.fieldsList[indexWhereMove].transform.position);
                 //TODO: handling when start action ( colider on field // wait for the time)
+                Debug.LogError("AFTER SET DESTINATION");
             });
             On("showAction", (E) =>
             {
-                if(username == ObjContainer.actualPlayer)
+                Debug.Log("SHOW ACTION");
+                if (username == ObjContainer.actualPlayer)
                 {
                     ObjContainer.playerAction.SetActive(true);
                 }
@@ -435,7 +434,22 @@ namespace Code.Network
                     ObjContainer.playerAction.SetActive(true);
                 }
             });
+            On("characterValues", (E) =>
+            {
+                var whoMove = E.data["whoMove"].ToString();
+                whoMove = whoMove.Replace("\"", "");
 
+                var changeValue = JsonConvert.DeserializeObject<ChangeValues[]>(E.data["changeValues"].ToString());
+                int playerIndex = ObjContainer.playersList.FindIndex(nm => nm.name == whoMove);
+                foreach (var x in changeValue)
+                {
+                    var increaseValues = ObjContainer.playersList[playerIndex].GetComponent<PlayerController>();
+                    increaseValues.playerProperties.properties += x;
+                    increaseValues.playerProperties.character += x;
+                }
+                ObjContainer.SetLevelValue(playerIndex);
+                GameObject.FindGameObjectWithTag("MainGameUI").transform.Find("PlayerInfo_" + whoMove).GetComponent<PlayerInfoUI>().SetPlayerInfo(playerIndex);
+            });
         }
 
         //Exit from room if player, if master delete room and all players from them
@@ -455,6 +469,7 @@ namespace Code.Network
                 roomName = "";
             }
         }
+
         public void SelectCharacter()
         {
             Emit("selectCharacter", new JSONObject(JsonUtility.ToJson(new Identity()
@@ -515,7 +530,6 @@ namespace Code.Network
                 Emit("roomCreate", new JSONObject(JsonUtility.ToJson(newRoom)));
             }
         }
-
 
         public void OnRoomList()
         {
@@ -581,6 +595,7 @@ namespace Code.Network
                 isReady = isReady
             })));
         }
+
         public void FieldSelected(int fieldID)
         {
             ObjContainer.PlayerMovedTo(fieldID);
@@ -591,18 +606,21 @@ namespace Code.Network
                 fieldID = fieldID
             })));
         }
-        public void PlayerAction()
+
+        public void PlayerAction(string category)
         {
             Emit("playerAction", new JSONObject(JsonUtility.ToJson(new Identity()
             {
                 username = username,
-                roomName = roomName
+                roomName = roomName,
+                changesCategory = category
             })));
         }
+
         public void EndTurn()
         {
-
         }
+
         public override void Update()
         {
             base.Update();
@@ -653,7 +671,27 @@ namespace Code.Network
         public Ability ability1;
         public Ability ability2;
         public Ability ability3;
-        //character class
+
+        public Character()
+        {
+            this.mana = 0;
+            this.attack = 0;
+            this.defence = 0;
+            this.health = 0;
+        }
+
+        public Character(int mana, int attack, int defence, int health)
+        {
+            this.mana = mana;
+            this.attack = attack;
+            this.defence = defence;
+            this.health = health;
+        }
+
+        public static Character operator +(Character ob1, ChangeValues ob2)
+        {
+            return new Character(ob1.mana + ob2.mana, ob1.attack + ob2.attack, ob1.defence + ob2.defence, ob1.health + ob2.health);
+        }
     }
 
     [Serializable]
@@ -674,6 +712,22 @@ namespace Code.Network
     }
 
     [Serializable]
+    public class ChangeValues
+    {
+        public int mana;
+        public int attack;
+        public int defence;
+        public int health;
+        public int exp;
+        public int gold;
+
+        public override string ToString()
+        {
+            return "Changed values:" + mana + " " + attack + " " + defence + " " + health + " " + exp + " " + gold;
+        }
+    }
+
+    [Serializable]
     public class PlayerProperties
     {
         public Properties properties;
@@ -687,6 +741,23 @@ namespace Code.Network
         public int gold;
         public int actualField;
         public int diceValue;
+
+        public Properties()
+        {
+            this.exp = 0;
+            this.gold = 0;
+        }
+
+        public Properties(int exp, int gold)
+        {
+            this.exp = exp;
+            this.gold = gold;
+        }
+
+        public static Properties operator +(Properties ob1, ChangeValues ob2)
+        {
+            return new Properties(ob1.exp + ob2.exp, ob1.gold + ob2.gold);
+        }
     }
 
     [Serializable]
@@ -716,8 +787,10 @@ namespace Code.Network
         public bool isReady;
         public string character;
         public int fieldID;
+        public string changesCategory;
     }
 
+    [Serializable]
     public class Token
     {
         public string token;

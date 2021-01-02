@@ -8,6 +8,7 @@ public class Action2Info : ScriptableObject
     public int id;
     public string type;
     public string title;
+    [TextArea]
     public string description;
     //What will be changed / value
 

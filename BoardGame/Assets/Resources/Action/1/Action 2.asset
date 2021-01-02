@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Action 2
   m_EditorClassIdentifier: 
   id: 0
-  type: 
-  title: 
-  description: 
+  type: 1
+  title: Title 2
+  description: Description 2
   attribute: []
   value: 
   integrateWith: []
