@@ -16,13 +16,11 @@ public class PlayerController : MonoBehaviour
     [Header("Player info UI")]
     public Text stats;
     public string usernameText;
+    public Animator anim;
     [Header("Level")]
     public int level = 1;
     public int actualExp = 0;
     public int maxExp = 100;
     public int increaseMaxExp = 25;
-    private void Start()
-    {
-        myNavMeshAgent = GetComponent<NavMeshAgent>();
-    }
+
 }

@@ -31,29 +31,10 @@ public class FieldInfo : MonoBehaviour
     //TODO: correct this on touch ? or sth AND after click disabled that option 
     public void OnMouseDown()
     {
-        if (Array.Exists(ObjContainer.activeFields, element => element == id))
+        if (ObjContainer.fieldsClickable && Array.Exists(ObjContainer.activeFields, element => element == id))
         {
+            ObjContainer.fieldsClickable = false;
             NetworkClient.FieldSelected(id);
-        }
-        else
-        {
-
-        }
-    }
-    private void OnTriggerEnter(Collider other)
-    {
-        //run action
-        if(id == ObjContainer.whereMove)
-        {
-            if (other.name == ObjContainer.actualPlayer && NetworkClient.username == ObjContainer.actualPlayer)
-            {
-               // ObjContainer.playerAction.SetActive(true);
-                //NetworkClient.PlayerAction();   
-            }
-            else
-            {
-              //  ObjContainer.playerAction.SetActive(true);
-            }
         }
     }
 }

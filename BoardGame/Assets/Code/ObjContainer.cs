@@ -1,5 +1,6 @@
 ﻿using Code.Network;
 using JetBrains.Annotations;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,6 +22,11 @@ public class ObjContainer : MonoBehaviour
     public Text whoMoveText;
     public Text diceValue;
     public Button dice;
+    public DiceSprites diceSprites;
+    public Image diceBackground;
+    private string diceSpriteValue;
+    public int[] activeFields;
+    public bool fieldsClickable;
 
     public GameObject playerAction;
     //start positions
@@ -28,7 +34,7 @@ public class ObjContainer : MonoBehaviour
     public Material mainFieldMaterial;
     private MapGenerator mapGenerator;
     //fields id where we can move
-    public int[] activeFields;
+    
 
     public List <GameObject> playersList;
     public List<GameObject> fieldsList;
@@ -70,11 +76,12 @@ public class ObjContainer : MonoBehaviour
     {
         actualPlayer = player;
         actualPlayerObj = playersList.Find(x => x.name == player);
-        whoMoveText.text = player + " move now";
+        whoMoveText.text = player + "\n moves now";
     }
 
     public void SetDiceValue(string value)
     {
+        diceBackground.sprite = diceSprites.dice[Int32.Parse(value) - 1];
         diceValue.text = value;
     }
 
@@ -93,6 +100,7 @@ public class ObjContainer : MonoBehaviour
                 int indexOfPossField = fieldsList.FindIndex(t => t.GetComponent<FieldInfo>().id == i);
                 fieldsList[indexOfPossField].GetComponent<Renderer>().material.color = Color.red;
             }
+            fieldsClickable = true;
         }
     }
     public void PlayerMovedTo(int id)
@@ -107,7 +115,7 @@ public class ObjContainer : MonoBehaviour
             else
             {
                 int indexOfPossField = MapGenerator.fieldsList.FindIndex(t => t.GetComponent<FieldInfo>().id == i);
-                fieldsList[indexOfPossField].GetComponent<Renderer>().material.color = Color.yellow;
+                fieldsList[indexOfPossField].GetComponent<Renderer>().material.color = mainFieldMaterial.color;
             }
 
         }
@@ -116,7 +124,7 @@ public class ObjContainer : MonoBehaviour
     {
         foreach(var field in fieldsList)
         {
-            field.GetComponent<Renderer>().material.color = Color.yellow;
+            field.GetComponent<Renderer>().material.color = mainFieldMaterial.color;
         }
     }
     public void SelectPossibleMoves(int[] possMoves)

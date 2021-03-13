@@ -16,15 +16,18 @@ public class ContainerUI : MonoBehaviour
 
     [Header("Create room")]
     [SerializeField] private GameObject roomCreateUI;
-
+    [SerializeField] private GameObject roomNameError;
     [SerializeField] private GameObject lobbyRoomMasterUI;
     [SerializeField] private RectTransform scrollContainer;
     [SerializeField] private InputField roomSize;
     [SerializeField] private InputField roomName;
 
     [Header("Login/Register")]
+    public GameObject usernameLogin;
+    public GameObject passwordLogin;
     [SerializeField] private GameObject loginError;
-
+    public GameObject passwordValidError;
+    public GameObject registerUI;
     [SerializeField] private GameObject loginUI;
     [SerializeField] private GameObject registerSucc;
     [SerializeField] private GameObject usernameExist;
@@ -39,7 +42,7 @@ public class ContainerUI : MonoBehaviour
 
     [Header("Select character")]
     [SerializeField] private GameObject selectCharacter;
-
+    [SerializeField] private GameObject selectCharacterPrefabs;
     [SerializeField] private Button characterSelected;
     [SerializeField] private Button warriorButton;
     [SerializeField] private Button archerButton;
@@ -49,7 +52,6 @@ public class ContainerUI : MonoBehaviour
 
     [Header("Players list")]
     [SerializeField] private PlayerListHandler playerListHandler;
-
     [SerializeField] private PlayerListHandler masterListHandler;
     [SerializeField] private GameObject[] playersInRoomObj;
 
@@ -69,7 +71,12 @@ public class ContainerUI : MonoBehaviour
                 break;
         }
     }
-
+    public void SetPlayerReadyInRoom(string playerReady, bool value)
+    {
+        int index = playerListHandler.playerList.FindIndex(tmp => tmp.GetComponent<Text>().text == playerReady);
+        playerListHandler.readyImages[index].SetActive(value);
+        masterListHandler.readyImages[index].SetActive(value);
+    }
     public void SetActiveUI(string elementUI, bool value)
     {
         switch (elementUI)
@@ -93,12 +100,23 @@ public class ContainerUI : MonoBehaviour
                 break;
 
             case "registred":
+                loginUI.SetActive(value);
+                registerUI.SetActive(!value);
                 loginError.SetActive(!value);
                 usernameExist.SetActive(!value);
                 registerSucc.SetActive(value);
                 break;
             // ROOM HANDLING
+            case "roomNameToShort":
+                roomNameError.GetComponent<Text>().text = "room name is to short!";
+                roomNameError.SetActive(true);
+                break;
+            case "roomNameExist":
+                roomNameError.GetComponent<Text>().text = "this room name is busy";
+                roomNameError.SetActive(true);
+                break;
             case "createdRoom":
+                roomNameError.SetActive(false);
                 mainMenuUI.SetActive(!value);
                 lobbyRoomMasterUI.SetActive(value);
                 roomCreateUI.SetActive(!value);
@@ -138,10 +156,13 @@ public class ContainerUI : MonoBehaviour
             case "selectCharacterMaster":
                 lobbyRoomMasterUI.SetActive(false);
                 selectCharacter.SetActive(true);
+                selectCharacterPrefabs.SetActive(true);
+
                 break;
 
             case "selectCharacterPlayer":
                 lobbyRoomUI.SetActive(false);
+                selectCharacter.SetActive(true);
                 selectCharacter.SetActive(true);
                 break;
             //OTHERS

@@ -13,8 +13,6 @@ namespace Code.Network
     public class NetworkClient : SocketIOComponent
     {
         public string username;
-
-        //TODO: clear password after login ?
         private string password;
 
         private string roomName;
@@ -41,6 +39,7 @@ namespace Code.Network
 
         public override void Start()
         {
+            
             base.Start();
             SetupEvents();
         }
@@ -92,6 +91,8 @@ namespace Code.Network
                 }
                 else if (handler == "registred")
                 {
+                    containerUI.passwordLogin.GetComponent<InputField>().text = password;
+                    containerUI.usernameLogin.GetComponent<InputField>().text = username;
                     containerUI.SetActiveUI("registred", true);
                 }
             });
@@ -119,24 +120,15 @@ namespace Code.Network
                 {
                     GameObject.Destroy(child.gameObject);
                 }
-                if (rooms.rooms.Count >= 0)
+                if (rooms.rooms.Count > 0)
                 {
                     foreach (var element in rooms.rooms)
                     {
                         GameObject roomFromList = Instantiate(playerInRoom, playersContainer);
                         roomFromList.name = element.Value.roomName;
-                        GameObject[] roomInfo = GameObject.FindGameObjectsWithTag("Respawn");
-                        foreach (GameObject x in roomInfo)
-                        {
-                            if (x.name == "RoomNameText")
-                            {
-                                x.GetComponent<Text>().text = element.Value.roomName.ToString();
-                            }
-                        }
+                        roomFromList.GetComponent<setRoomInLsit>().roomName.text = element.Value.roomName.ToString();
                         containerUI.GetPlayerContainer().sizeDelta = new Vector2(containerUI.GetPlayerContainer().sizeDelta.x, containerUI.GetPlayerContainer().sizeDelta.x + 200);
-
-                        playerInRoom.GetComponent<setRoomInLsit>().roomName.text = element.Value.roomName.ToString();
-                        playerInRoom.GetComponent<setRoomInLsit>().roomSize.text = element.Value.roomSize.ToString();   
+                        roomFromList.GetComponent<setRoomInLsit>().roomSize.text = "size: " + element.Value.players.Count + "/" + element.Value.roomSize.ToString();
                     }
                 }
                 containerUI.SetActiveUI("roomList", true);
@@ -227,6 +219,7 @@ namespace Code.Network
             On("playerReady", (E) =>
             {
                 var result = JsonConvert.DeserializeObject<bool>(E.data["roomReady"].ToString());
+                var playerReadyName = JsonConvert.DeserializeObject<String>(E.data["username"].ToString());
                 if (masterRoom)
                 {
                     if (result)
@@ -249,6 +242,7 @@ namespace Code.Network
                         //Debug.Log("NOT READY");
                     }
                 }
+                containerUI.SetPlayerReadyInRoom(playerReadyName, result);
             });
             //TODO: handling change scene to main game
             On("selectedCharacters", (E) =>
@@ -315,21 +309,21 @@ namespace Code.Network
 
                     if (element.Value.character.characterClass == "mage")
                     {
-                        newCharacter = Instantiate(Resources.Load<GameObject>("Prefabs/mageCharacter"), spawnPosition, Quaternion.identity, playersCont.transform);
+                        newCharacter = Instantiate(Resources.Load<GameObject>("Prefabs/mageCharacter1"), spawnPosition, Quaternion.identity, playersCont.transform);
                         newPlayerInfo = Instantiate(Resources.Load<RawImage>("Prefabs/PlayerInfo"), new Vector3(startPos + indexToClone * avatarPos, 430f, 0f), Quaternion.identity, GameUI.transform);
                         newPlayerInfo.transform.localPosition = new Vector3(startPos + indexToClone * avatarPos, 430f, 0f);
                         newPlayerInfo.texture = Resources.Load<Texture>("Avatars/avatar1");
                     }
                     else if (element.Value.character.characterClass == "archer")
                     {
-                        newCharacter = Instantiate(Resources.Load<GameObject>("Prefabs/archerCharacter"), spawnPosition, Quaternion.identity, playersCont.transform);
+                        newCharacter = Instantiate(Resources.Load<GameObject>("Prefabs/archer/archerCharacter1"), spawnPosition, Quaternion.identity, playersCont.transform);
                         newPlayerInfo = Instantiate(Resources.Load<RawImage>("Prefabs/PlayerInfo"), new Vector3(startPos + indexToClone * avatarPos, 430f, 0f), Quaternion.identity, GameUI.transform);
                         newPlayerInfo.transform.localPosition = new Vector3(startPos + indexToClone * avatarPos, 430f, 0f);
                         newPlayerInfo.texture = Resources.Load<Texture>("Avatars/avatar2");
                     }
                     else
                     {
-                        newCharacter = Instantiate(Resources.Load<GameObject>("Prefabs/warriorCharacter"), spawnPosition, Quaternion.identity, playersCont.transform);
+                        newCharacter = Instantiate(Resources.Load<GameObject>("Prefabs/warriorCharacter1"), spawnPosition, Quaternion.identity, playersCont.transform);
                         newPlayerInfo = Instantiate(Resources.Load<RawImage>("Prefabs/PlayerInfo"), new Vector3(startPos + indexToClone * avatarPos, 430f, 0f), Quaternion.identity, GameUI.transform);
                         newPlayerInfo.transform.localPosition = new Vector3(startPos + indexToClone * avatarPos, 430f, 0f);
                         newPlayerInfo.texture = Resources.Load<Texture>("Avatars/avatar3");
@@ -338,7 +332,6 @@ namespace Code.Network
                     newPlayerInfo.name = "PlayerInfo_" + element.Key;
                     newPlayerInfo.GetComponent<PlayerInfoUI>().playerNameText.text = element.Key;
                     newCharacter.name = element.Key;
-                    Debug.Log("AFTER NAME KEY");
                     newCharacter.GetComponent<PlayerController>().playerProperties = element.Value;
 
                     newCharacter.GetComponent<PlayerController>().usernameText = element.Key;
@@ -347,8 +340,8 @@ namespace Code.Network
                     newPlayerInfo.GetComponent<PlayerInfoUI>().SetPlayerInfo(indexToClone);
                     indexToClone++;
 
-                    Debug.LogError("PLAYER ADDED");
                 }
+                ObjContainer.MapGenerator.fieldsList[0].GetComponent<FieldInfo>().enabled = false;
             });
             On("playerTurn", (E) =>
             {
@@ -408,8 +401,8 @@ namespace Code.Network
                 playerMove = playerMove.Replace("\"", "");
 
                 int playerIndex = ObjContainer.playersList.FindIndex(x => x.name == playerMove);
-
                 int indexWhereMove = ObjContainer.fieldsList.FindIndex(t => t.GetComponent<FieldInfo>().id == whereMove);
+
                 //Field id , place selected by player
                 ObjContainer.whereMove = whereMove;
 
@@ -417,14 +410,13 @@ namespace Code.Network
                 int actionID = Convert.ToInt32(E.data["actionID"].ToString());
                 //Before change position add type and id action ( after character enter on poss field, set active )
                 ObjContainer.ActionController.SetActionInfo(typeID, actionID);
-                Debug.Log("BEFORE SET DESTINATION");
                 ObjContainer.playersList[playerIndex].GetComponent<NavMeshAgent>().SetDestination(ObjContainer.fieldsList[indexWhereMove].transform.position);
+                
+
                 //TODO: handling when start action ( colider on field // wait for the time)
-                Debug.LogError("AFTER SET DESTINATION");
             });
             On("showAction", (E) =>
             {
-                Debug.Log("SHOW ACTION");
                 if (username == ObjContainer.actualPlayer)
                 {
                     ObjContainer.playerAction.SetActive(true);
@@ -481,9 +473,11 @@ namespace Code.Network
 
         public void OnRegister()
         {
-            username = GameObject.Find("UsernameField").GetComponent<InputField>().text;
-            password = GameObject.Find("PasswordField").GetComponent<InputField>().text;
-            if (username.Length > 0 && password.Length > 0)
+            username = GameObject.Find("UsernameFieldRegister").GetComponent<InputField>().text;
+            password = GameObject.Find("PasswordFieldRegister").GetComponent<InputField>().text;
+            string passwordValid = GameObject.Find("PasswordFieldValid").GetComponent<InputField>().text;
+            
+            if (username.Length > 0 && password.Length > 0 && password == passwordValid)
             {
                 Emit("createAccount", new JSONObject(JsonUtility.ToJson(new GameUser()
                 {
@@ -491,18 +485,21 @@ namespace Code.Network
                     password = password
                 })));
             }
+            else if(passwordValid != password)
+            {
+                containerUI.passwordValidError.SetActive(true);
+            }
             else
             {
-                Debug.Log("Create account ERROR");
+                
             }
-            password = "";
         }
 
         public void OnLogin()
         {
             //TODO: correct login handling
-            username = GameObject.Find("UsernameField").GetComponent<InputField>().text;
-            password = GameObject.Find("PasswordField").GetComponent<InputField>().text;
+            username = GameObject.Find("UsernameFieldLogin").GetComponent<InputField>().text;
+            password = GameObject.Find("PasswordFieldLogin").GetComponent<InputField>().text;
 
             if (username.Length > 0 && password.Length > 0)
             {
@@ -528,6 +525,10 @@ namespace Code.Network
                 };
 
                 Emit("roomCreate", new JSONObject(JsonUtility.ToJson(newRoom)));
+            }
+            else
+            {
+                containerUI.SetActiveUI("roomNameToShort", true);
             }
         }
 

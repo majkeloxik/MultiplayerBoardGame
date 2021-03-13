@@ -40,7 +40,6 @@ public class PlayerInfoUI : MonoBehaviour
         level.text = "Level: " + player.level.ToString();
         exp.text = player.playerProperties.properties.exp.ToString();
         float amountNumber = (float)player.playerProperties.properties.exp / (float)player.maxExp;
-        Debug.LogError($"{player.playerProperties.properties.exp} / {player.maxExp} = {amountNumber}");
         expProgres.fillAmount = amountNumber; 
     }
     private void Start()
